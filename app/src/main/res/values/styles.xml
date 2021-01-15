@@ -1,11 +1,213 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorSecondaryLight</item>
+        <item name="background">@color/background</item>
+        <item name="colorError">@color/error</item>
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
+        <item name="colorControlNormal">@color/colorSecondaryLight</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item>
+        <item name="materialButtonStyle">@style/MaterialButtonStyle</item>
+        <item name="sliderStyle">@style/Slider</item>
     </style>
 
+    <style name="RadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:textColor">@color/colorSecondary</item>
+        <item name="android:buttonTint">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="MaterialButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/onSecondary</item>
+        <item name="backgroundTint">@color/color_secondary_state_list</item>
+    </style>
+
+    <style name="MaterialButtonOutlinedStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@color/color_primary_dark_state_list</item>
+    </style>
+
+    <style name="MaterialImageButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:tint">@color/colorPrimaryDark</item>
+        <item name="android:minWidth">20dp</item>
+    </style>
+
+    <style name="FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="sdMainFabClosedBackgroundColor">@color/colorSecondary</item>
+        <item name="sdMainFabOpenedBackgroundColor">@color/colorSecondary</item>
+        <item name="backgroundTint">@color/colorSecondary</item>
+        <item name="tint">@color/onSecondary</item>
+    </style>
+
+    <style name="ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="backgroundTint">@color/colorSecondary</item>
+        <item name="android:textColor">@color/onSecondary</item>
+        <item name="iconTint">@color/onSecondary</item>
+        <item name="tint">@color/onSecondary</item>
+    </style>
+
+    <style name="BottomNavigation">
+        <item name="itemIconTint">@color/colorPrimaryDark</item>
+        <item name="itemTextColor">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="FilledBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="hintTextColor">@color/colorPrimaryDark</item>
+        <item name="boxStrokeColor">@color/colorPrimaryDark</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="iconTint">@color/colorPrimary</item>
+    </style>
+
+    <style name="OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextColor">@color/colorPrimaryDark</item>
+        <item name="boxStrokeColor">@color/colorPrimaryDark</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="iconTint">@color/colorPrimary</item>
+        <item name="startIconTint">@color/colorSecondaryLight</item>
+        <item name="endIconTint">@color/colorSecondaryLight</item>
+    </style>
+
+    <style name="OutlinedBox.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="hintTextColor">@color/colorPrimaryDark</item>
+        <item name="boxStrokeColor">@color/colorPrimaryDark</item>
+        <item name="boxStrokeWidth">2dp</item>
+    </style>
+
+    <style name="Chip.Action" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipBackgroundColor">@color/chip_action_background_color</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+    </style>
+
+    <style name="Chip.Entry" parent="Widget.MaterialComponents.Chip.Entry">
+        <item name="chipBackgroundColor">@color/chip_selectable_background_color</item>
+        <item name="rippleColor">@color/chip_ripple_color</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="checkedIcon">@drawable/chip_checked_circle</item>
+    </style>
+
+    <style name="Chip.Filter" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipBackgroundColor">@color/chip_selectable_background_color</item>
+        <item name="rippleColor">@color/chip_ripple_color</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+    </style>
+
+    <style name="Chip.Choice" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_selectable_background_color</item>
+        <item name="rippleColor">@color/chip_ripple_color</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+    </style>
+
+    <style name="Slider" parent="Widget.MaterialComponents.Slider">
+        <item name="thumbColor">@color/colorPrimaryDark</item>
+        <item name="thumbRadius">10dp</item>
+        <item name="trackColorActive">@color/colorPrimaryDark</item>
+        <item name="trackColorInactive">@color/colorSecondaryLight</item>
+        <item name="android:stepSize">1.0</item>
+        <item name="labelStyle">@style/Tooltip</item>
+    </style>
+
+    <style name="Tooltip" parent="Widget.MaterialComponents.Tooltip">
+        <item name="shapeAppearance">@style/Tooltip.Shape</item>
+        <item name="backgroundTint">@color/colorSecondaryLight</item>
+        <item name="android:textColor">@color/onSecondary</item>
+    </style>
+
+    <style name="Tooltip.Shape" parent="ShapeAppearance.MaterialComponents.Tooltip">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="Headline1" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="fontFamily">@font/montserrat_light</item>
+        <item name="android:fontFamily">@font/montserrat_light</item>
+        <item name="android:textSize">96sp</item>
+        <item name="android:letterSpacing">-1.5</item>
+    </style>
+
+    <style name="Headline2" parent="TextAppearance.MaterialComponents.Headline2">
+        <item name="fontFamily">@font/montserrat_light</item>
+        <item name="android:fontFamily">@font/montserrat_light</item>
+        <item name="android:textSize">60sp</item>
+        <item name="android:letterSpacing">-0.5</item>
+    </style>
+
+    <style name="Headline3" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="fontFamily">@font/montserrat_regular</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textSize">48sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="Headline4" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="fontFamily">@font/montserrat_regular</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textSize">34sp</item>
+        <item name="android:letterSpacing">0.25</item>
+    </style>
+
+    <style name="Headline5" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/montserrat_regular</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="Headline6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/montserrat_regular</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:letterSpacing">0.15</item>
+    </style>
+
+    <style name="Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/montserrat_regular</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.15</item>
+    </style>
+
+    <style name="Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="fontFamily">@font/montserrat_regular</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+
+    <style name="Body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.5</item>
+    </style>
+
+    <style name="Body2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">0.25</item>
+    </style>
+
+    <style name="Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">1.25</item>
+    </style>
+
+    <style name="Caption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0.4</item>
+    </style>
+
+    <style name="Overline" parent="TextAppearance.MaterialComponents.Overline">
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">1.5</item>
+    </style>
 </resources>
