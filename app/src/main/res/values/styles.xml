@@ -13,6 +13,21 @@
         <item name="colorControlHighlight">@color/colorPrimary</item>
         <item name="materialButtonStyle">@style/MaterialButtonStyle</item>
         <item name="sliderStyle">@style/Slider</item>
+        <item name="textAppearanceHeadline1">@style/Headline1</item>
+        <item name="textAppearanceHeadline2">@style/Headline2</item>
+        <item name="textAppearanceHeadline3">@style/Headline3</item>
+        <item name="textAppearanceHeadline4">@style/Headline4</item>
+        <item name="textAppearanceHeadline5">@style/Headline5</item>
+        <item name="textAppearanceHeadline6">@style/Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/Subtitle2</item>
+        <item name="textAppearanceBody1">@style/Body1</item>
+        <item name="textAppearanceBody2">@style/Body2</item>
+        <item name="textAppearanceButton">@style/Button</item>
+        <item name="textAppearanceCaption">@style/Caption</item>
+        <item name="textAppearanceOverline">@style/Overline</item>
+        <item name="android:textViewStyle">@style/Body2</item>
+        <item name="textInputStyle">@style/OutlinedBox</item>
     </style>
 
     <style name="RadioButtonStyle" parent="Widget.AppCompat.CompoundButton.RadioButton">
@@ -53,26 +68,33 @@
         <item name="itemTextColor">@color/colorPrimaryDark</item>
     </style>
 
-    <style name="FilledBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
-        <item name="hintTextColor">@color/colorPrimaryDark</item>
-        <item name="boxStrokeColor">@color/colorPrimaryDark</item>
-        <item name="boxStrokeWidth">2dp</item>
-        <item name="iconTint">@color/colorPrimary</item>
-    </style>
-
     <style name="OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="hintTextColor">@color/colorPrimaryDark</item>
-        <item name="boxStrokeColor">@color/colorPrimaryDark</item>
+        <item name="boxStrokeColor">@color/outlined_box_stroke_color</item>
         <item name="boxStrokeWidth">2dp</item>
-        <item name="iconTint">@color/colorPrimary</item>
+        <item name="android:textAppearance">@style/Body1</item>
         <item name="startIconTint">@color/colorSecondaryLight</item>
         <item name="endIconTint">@color/colorSecondaryLight</item>
+        <item name="boxStrokeErrorColor">@color/error</item>
+        <item name="errorTextColor">@color/error</item>
+        <item name="materialThemeOverlay">@style/TextInput.TextAppearence</item>
     </style>
 
     <style name="OutlinedBox.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
         <item name="hintTextColor">@color/colorPrimaryDark</item>
-        <item name="boxStrokeColor">@color/colorPrimaryDark</item>
+        <item name="boxStrokeColor">@color/outlined_box_stroke_color</item>
         <item name="boxStrokeWidth">2dp</item>
+        <item name="android:textAppearance">@style/Body1</item>
+        <item name="startIconTint">@color/colorSecondaryLight</item>
+        <item name="endIconTint">@color/colorSecondaryLight</item>
+        <item name="boxStrokeErrorColor">@color/error</item>
+        <item name="errorTextColor">@color/error</item>
+        <item name="materialThemeOverlay">@style/TextInput.TextAppearence</item>
+    </style>
+
+    <style name="TextInput.TextAppearence" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="textAppearanceSubtitle1">@style/Body1</item>
+        <item name="textAppearanceCaption">@style/Caption</item>
     </style>
 
     <style name="Chip.Action" parent="Widget.MaterialComponents.Chip.Action">
@@ -122,70 +144,60 @@
         <item name="fontFamily">@font/montserrat_light</item>
         <item name="android:fontFamily">@font/montserrat_light</item>
         <item name="android:textSize">96sp</item>
-        <item name="android:letterSpacing">-1.5</item>
     </style>
 
     <style name="Headline2" parent="TextAppearance.MaterialComponents.Headline2">
         <item name="fontFamily">@font/montserrat_light</item>
         <item name="android:fontFamily">@font/montserrat_light</item>
         <item name="android:textSize">60sp</item>
-        <item name="android:letterSpacing">-0.5</item>
     </style>
 
     <style name="Headline3" parent="TextAppearance.MaterialComponents.Headline3">
         <item name="fontFamily">@font/montserrat_regular</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
         <item name="android:textSize">48sp</item>
-        <item name="android:letterSpacing">0</item>
     </style>
 
     <style name="Headline4" parent="TextAppearance.MaterialComponents.Headline4">
         <item name="fontFamily">@font/montserrat_regular</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
         <item name="android:textSize">34sp</item>
-        <item name="android:letterSpacing">0.25</item>
     </style>
 
     <style name="Headline5" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="fontFamily">@font/montserrat_regular</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
         <item name="android:textSize">24sp</item>
-        <item name="android:letterSpacing">0</item>
     </style>
 
     <style name="Headline6" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="fontFamily">@font/montserrat_regular</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:letterSpacing">0.15</item>
     </style>
 
     <style name="Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="fontFamily">@font/montserrat_regular</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:letterSpacing">0.15</item>
     </style>
 
     <style name="Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
         <item name="fontFamily">@font/montserrat_regular</item>
         <item name="android:fontFamily">@font/montserrat_regular</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:letterSpacing">0.1</item>
     </style>
 
     <style name="Body1" parent="TextAppearance.MaterialComponents.Body1">
         <item name="fontFamily">@font/roboto_regular</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:letterSpacing">0.5</item>
     </style>
 
     <style name="Body2" parent="TextAppearance.MaterialComponents.Body2">
         <item name="fontFamily">@font/roboto_regular</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:letterSpacing">0.25</item>
     </style>
 
     <style name="Button" parent="TextAppearance.MaterialComponents.Button">
@@ -193,14 +205,12 @@
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:letterSpacing">1.25</item>
     </style>
 
     <style name="Caption" parent="TextAppearance.MaterialComponents.Caption">
         <item name="fontFamily">@font/roboto_regular</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textSize">12sp</item>
-        <item name="android:letterSpacing">0.4</item>
     </style>
 
     <style name="Overline" parent="TextAppearance.MaterialComponents.Overline">
@@ -208,6 +218,5 @@
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textSize">10sp</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:letterSpacing">1.5</item>
     </style>
 </resources>
