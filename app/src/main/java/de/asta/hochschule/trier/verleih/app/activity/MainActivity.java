@@ -1,7 +1,10 @@
-package de.asta.hochschule.trier.verleih;
+package de.asta.hochschule.trier.verleih.app.activity;
+
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
+
+import de.asta.hochschule.trier.verleih.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -10,4 +13,5 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
 }
