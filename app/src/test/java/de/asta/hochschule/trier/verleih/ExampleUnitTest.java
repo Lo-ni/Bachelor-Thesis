@@ -1,4 +1,4 @@
-package com.example.myfirstapp;
+package de.asta.hochschule.trier.verleih;
 
 import org.junit.Test;
 
