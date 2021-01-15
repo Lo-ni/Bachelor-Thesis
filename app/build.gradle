@@ -1,8 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.firebase.crashlytics'
+
 
 android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     compileSdkVersion 30
     defaultConfig {
         applicationId "de.asta.hochschule.trier.verleih"
@@ -33,6 +39,10 @@ android {
         exclude 'META-INF/ASL2.0'
         exclude("META-INF/*.kotlin_module")
     }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -52,13 +62,22 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+    implementation "androidx.activity:activity-ktx:1.1.0"
+    implementation 'androidx.fragment:fragment-ktx:1.1.0'
 
     // GOOGLE
     implementation 'com.google.gms:google-services:4.3.4'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
-    implementation 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.android.material:material:1.2.1'
+    // FIREBASE
+    implementation platform('com.google.firebase:firebase-bom:26.3.0')
+    implementation 'com.google.firebase:firebase-database-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-storage-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.firebaseui:firebase-ui-database:7.1.1'
+    implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
 
     // THIRD PARTY
     implementation 'joda-time:joda-time:2.10.1'
@@ -77,6 +96,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
+
 repositories {
     maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
     mavenCentral()
