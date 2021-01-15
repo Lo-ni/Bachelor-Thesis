@@ -1,3 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AStA Verleih</string>
+    <string name="hello">Hello!</string>
+    <string name="welcome_description">Welome to the first AStA App!<br />Herewith you can easily rent objects for your next event from home. Just sign in and there you go!</string>
+    <string name="sign_in">Sign In</string>
+    <string name="oder">or</string>
 </resources>

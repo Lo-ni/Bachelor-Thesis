@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AStA Verleih</string>
+    <string name="hello">Hallo!</string>
+    <string name="welcome_description">Willkommen zur ersten App deines AStAs!<br />Hiermit kannst du bequem von zu Hause aus Gegenstände für dein nächstes Event ausleihen. Melde dich einfach an und schon kann es los gehen!</string>
+    <string name="sign_in">Einloggen</string>
+    <string name="oder">oder</string>
+</resources>
