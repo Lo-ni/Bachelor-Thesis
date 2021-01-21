@@ -20,7 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".app.activity.MainActivity" />
+        <activity
+            android:name=".app.activity.MainActivity"
+            android:configChanges="uiMode"
+            android:launchMode="singleTop" />
         <activity android:name=".signIn.activity.SignInActivity" />
     </application>
 

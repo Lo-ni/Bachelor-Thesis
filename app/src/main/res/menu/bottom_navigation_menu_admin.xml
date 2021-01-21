@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/nav_admin_main"
         android:icon="@drawable/ic_admin"
-        android:title="@string/admin"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/nav_rental_main"
-        android:icon="@drawable/ic_rental"
-        android:title="@string/rental_title"
-        app:showAsAction="ifRoom" />
+        android:title="@string/admin" />
 
     <item
         android:id="@+id/nav_event_main"
         android:icon="@drawable/ic_calendar"
-        android:title="@string/events_title"
-        app:showAsAction="ifRoom" />
+        android:title="@string/events_title" />
+
+    <item
+        android:id="@+id/nav_news_main"
+        android:icon="@drawable/ic_message"
+        android:title="@string/news_title" />
 
     <item
         android:id="@+id/nav_settings_main"
         android:icon="@drawable/ic_settings"
-        android:title="@string/settings_title"
-        app:showAsAction="ifRoom" />
+        android:title="@string/settings_title" />
 
 </menu>

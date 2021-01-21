@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation.xml"
+    app:startDestination="@id/nav_rental_main">
+
+    <fragment
+        android:id="@+id/nav_rental_main"
+        android:name="de.asta.hochschule.trier.verleih.rental.fragment.RentalMainFragment"
+        android:label="RentalMainFragment"
+        tools:layout="@layout/fragment_rental_main" />
+    <fragment
+        android:id="@+id/nav_event_main"
+        android:name="de.asta.hochschule.trier.verleih.event.fragment.EventMainFragment"
+        android:label="EventMainFragment"
+        tools:layout="@layout/fragment_event_main" />
+    <fragment
+        android:id="@+id/nav_news_main"
+        android:name="de.asta.hochschule.trier.verleih.news.fragment.NewsMainFragment"
+        android:label="NewsMainFragment"
+        tools:layout="@layout/fragment_news_main" />
+    <fragment
+        android:id="@+id/nav_settings_main"
+        android:name="de.asta.hochschule.trier.verleih.settings.fragment.SettingsMainFragment"
+        android:label="SettingsMainFragment"
+        tools:layout="@layout/fragment_settings_main" />
+    <fragment
+        android:id="@+id/nav_admin_main"
+        android:name="de.asta.hochschule.trier.verleih.admin.fragment.AdminMainFragment"
+        android:label="AdminMainFragment"
+        tools:layout="@layout/fragment_admin_main" />
+
+</navigation>
