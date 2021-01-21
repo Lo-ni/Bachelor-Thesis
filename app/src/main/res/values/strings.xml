@@ -5,4 +5,12 @@
     <string name="welcome_description">Welome to the first AStA App!\nHerewith you can easily rent objects for your next event from home. Just sign in and there you go!</string>
     <string name="sign_in">Sign In</string>
     <string name="oder">or</string>
+    <string name="rental_title">Rental</string>
+    <string name="events_title">Events</string>
+    <string name="news_title">News</string>
+    <string name="settings_title">Settings</string>
+    <string name="admin">Admin</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="search">Search</string>
 </resources>

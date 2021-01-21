@@ -5,4 +5,12 @@
     <string name="welcome_description">Willkommen zur ersten App deines AStAs!\nHiermit kannst du bequem von zu Hause aus Gegenstände für dein nächstes Event ausleihen. Melde dich einfach an und schon kann es los gehen!</string>
     <string name="sign_in">Einloggen</string>
     <string name="oder">oder</string>
+    <string name="rental_title">Verleih</string>
+    <string name="events_title">Events</string>
+    <string name="news_title">Neues</string>
+    <string name="settings_title">Einstellungen</string>
+    <string name="admin">Admin</string>
+    <string name="delete">Löschen</string>
+    <string name="save">Speichern</string>
+    <string name="search">Suchen</string>
 </resources>
