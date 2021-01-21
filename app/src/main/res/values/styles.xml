@@ -89,8 +89,9 @@
     </style>
 
     <style name="BottomNavigation">
-        <item name="itemIconTint">@color/colorPrimaryDark</item>
-        <item name="itemTextColor">@color/colorPrimaryDark</item>
+        <item name="itemIconTint">@color/onPrimary</item>
+        <item name="itemTextColor">@color/onPrimary</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
     </style>
 
     <style name="OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
