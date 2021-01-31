@@ -34,18 +34,20 @@ class SignInActivity : AppCompatActivity() {
 			} else {
 				// sign in failed
 				if (response == null) {
-					// user canceled the sign-in flow using the back button
+					// user cancelled the sign-in flow using the back button
 					Log.d(TAG, "Sign In has been canceled")
 					Toast.makeText(this, "Bitte beende den Login-Vorgang", Toast.LENGTH_SHORT)
 						.show()
+					startActivityForResult(viewModel.getSignInIntent(), RC_SIGN_IN)
 				} else {
 					// handle the error
 					Log.e(TAG, "Sign In failed", response.error)
 					Toast.makeText(
-                        this,
-                        "Login fehlgeschlagen. Bitte versuche es erneut.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+						this,
+						"Login fehlgeschlagen. Bitte versuche es erneut.",
+						Toast.LENGTH_SHORT
+					).show()
+					startActivityForResult(viewModel.getSignInIntent(), RC_SIGN_IN)
 				}
 			}
 		}

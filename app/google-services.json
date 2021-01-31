@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:805453415476:android:f6a8f77d72059d0176f661",
         "android_client_info": {
-          "package_name": "de.asta.hochschule.trier.verleih"
+          "package_name": "com.asta.verleih"
         }
       },
       "oauth_client": [
@@ -20,6 +20,43 @@
           "android_info": {
             "package_name": "com.asta.verleih",
             "certificate_hash": "39c30f7c20b967eff222febc57a97f0f68f8fcf0"
+          }
+        },
+        {
+          "client_id": "805453415476-2scfat64v6bcrlfaonncgf751o3d6qks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSNfEfDm07VMj711lrsQ0YH3EPZ5TFLSo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "805453415476-2scfat64v6bcrlfaonncgf751o3d6qks.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:805453415476:android:9af5e0929a5cd16876f661",
+        "android_client_info": {
+          "package_name": "de.asta.hochschule.trier.verleih"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "805453415476-3gs81sgltmllou4u17ccj7jjjr2di35n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.asta.hochschule.trier.verleih",
+            "certificate_hash": "eba90e2ef8d3477297f8ef026612f55269723173"
           }
         },
         {

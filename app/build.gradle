@@ -64,11 +64,11 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
     implementation "androidx.activity:activity-ktx:1.1.0"
     implementation 'androidx.fragment:fragment-ktx:1.2.5'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
 
     // GOOGLE
-    implementation 'com.google.gms:google-services:4.3.4'
+    implementation 'com.google.gms:google-services:4.3.5'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.android.material:material:1.2.1'

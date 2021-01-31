@@ -41,7 +41,9 @@
         <item name="colorControlActivated">@color/colorSecondaryLight</item>
         <item name="colorControlNormal">@color/colorSecondaryLight</item>
         <item name="colorControlHighlight">@color/colorSecondary</item>
+        <item name="android:textColor">@color/colorSecondary</item>
         <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:editTextColor">@color/colorSecondaryLight</item>
     </style>
 
     <style name="RadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
