@@ -13,4 +13,19 @@
     <string name="delete">Löschen</string>
     <string name="save">Speichern</string>
     <string name="search">Suchen</string>
+    <string name="no_rental_message">Sorry, es konnte keine Verleihanfrage gefunden werden.</string>
+    <string name="new_rental">Neue Reservierung</string>
+    <string name="new_rental_date_time_description">Für welche Veranstaltung möchtest du eine Reservierung tätigen? Bitte gib zunächst die untenstehenden Daten an.</string>
+    <string name="event_name">Veranstaltungstitel</string>
+    <string name="pick_up">Abholung</string>
+    <string name="date">Datum</string>
+    <string name="time">Uhrzeit</string>
+    <string name="return_date_time">Rückgabe</string>
+    <string name="new_rental_items_description">Wähle Gegenstände aus, die du ausleihen möchtest.</string>
+    <string name="new_rental_items_quantity_description">Bitte wähle für jeden Gegenstand aus, wie viele Exemplare du benötigst.</string>
+    <string name="new_rental_overview_description">Bitte überprüfe deine Eingaben.</string>
+    <string name="no_recents_rental">Es existieren keine aktuellen Reservierungen.</string>
+    <string name="past_title">Vergangen</string>
+    <string name="no_past_rental">Es existieren noch keine vergangenen Reservierungen.</string>
+    <string name="recent_title">Aktuell</string>
 </resources>
