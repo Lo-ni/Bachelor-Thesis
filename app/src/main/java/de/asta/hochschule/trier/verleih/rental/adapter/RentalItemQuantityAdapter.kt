@@ -10,7 +10,7 @@ import de.asta.hochschule.trier.verleih.util.GlideApp
 
 class RentalItemQuantityAdapter(
 	private var objects: ArrayList<RentalObject>?,
-	private val removeItem: (RentalObject?) -> Unit
+	private val removeItem: (RentalObject?, Int) -> Unit
 ) :
 	RecyclerView.Adapter<RentalItemQuantityAdapter.ViewHolder>() {
 	
@@ -32,6 +32,18 @@ class RentalItemQuantityAdapter(
 		return objects?.size ?: 0
 	}
 	
+	fun removeObject(rentalObject: RentalObject?, position: Int) {
+		objects?.remove(rentalObject)
+		notifyItemRemoved(position)
+	}
+	
+	fun addObject(rentalObject: RentalObject?, position: Int) {
+		if (rentalObject != null) {
+			objects?.add(position, rentalObject)
+			notifyItemInserted(position)
+		}
+	}
+	
 	fun resetObjects(resetObjects: ArrayList<RentalObject>): RentalItemQuantityAdapter {
 		objects = resetObjects
 		notifyDataSetChanged()
@@ -40,7 +52,7 @@ class RentalItemQuantityAdapter(
 	
 	class ViewHolder(
 		private val itemBinding: RowItemQuantityOverviewBinding,
-		private val removeItem: (RentalObject?) -> Unit
+		private val removeItem: (RentalObject?, Int) -> Unit
 	) :
 		RecyclerView.ViewHolder(itemBinding.root) {
 		fun bind(rentalObject: RentalObject?) {
@@ -53,7 +65,7 @@ class RentalItemQuantityAdapter(
 				.into(itemBinding.itemCircleImageView)
 			
 			itemBinding.itemDeleteButton.setOnClickListener {
-				removeItem.invoke(rentalObject)
+				removeItem.invoke(rentalObject, adapterPosition)
 			}
 		}
 	}

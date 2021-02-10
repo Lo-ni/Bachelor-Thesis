@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.*
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.*
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.FragmentNewRentalItemsQuanityBinding
 import de.asta.hochschule.trier.verleih.rental.adapter.RentalItemQuantityAdapter
@@ -30,11 +31,34 @@ class NewRentalItemsQuantityFragment : Fragment(R.layout.fragment_new_rental_ite
 		super.onViewCreated(view, savedInstanceState)
 		
 		binding.itemsRecyclerview.layoutManager = LinearLayoutManager(context)
-		adapter = RentalItemQuantityAdapter(viewModel.objectsLiveData.value) {
-			if (it != null) {
-				viewModel.removeRentalObject(it)
+		adapter =
+			RentalItemQuantityAdapter(viewModel.objectsLiveData.value) { rentalObject, position ->
+				// remove object from recyclerview only
+				adapter?.removeObject(rentalObject, position)
+				
+				// undo snackbar
+				val snackbar = Snackbar.make(
+					binding.root,
+					"${rentalObject?.name} ${getString(R.string.deleted)}",
+					Snackbar.LENGTH_LONG
+				)
+				snackbar.setAction(R.string.undo) {
+					// re-add object to recyclerview
+					adapter?.addObject(rentalObject, position)
+				}
+				snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+					override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+						if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+							// now remove object permanently from viewmodel
+							if (rentalObject != null) {
+								viewModel.removeRentalObject(rentalObject)
+							}
+						}
+						super.onDismissed(transientBottomBar, event)
+					}
+				})
+				snackbar.show()
 			}
-		}
 		binding.itemsRecyclerview.adapter = adapter
 		
 		viewModel.objectsLiveData.observe(requireActivity(), { objects ->

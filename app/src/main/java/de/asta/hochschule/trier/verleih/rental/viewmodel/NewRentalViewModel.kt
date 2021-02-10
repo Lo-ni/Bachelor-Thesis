@@ -15,12 +15,14 @@ class NewRentalViewModel : ViewModel() {
 	fun addRentalObject(rentalObject: RentalObject) {
 		val list = getObjectList()
 		list?.add(rentalObject)
+		list?.sortBy { it.name }
 		mutableObjects.value = list
 	}
 	
 	fun removeRentalObject(rentalObject: RentalObject) {
 		val list = getObjectList()
 		list?.remove(rentalObject)
+		list?.sortBy { it.name }
 		mutableObjects.value = list
 	}
 	
