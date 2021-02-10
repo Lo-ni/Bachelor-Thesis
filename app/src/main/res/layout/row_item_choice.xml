@@ -4,7 +4,7 @@
     android:id="@+id/item_choice_card"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="4dp"
     android:elevation="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,12 +13,13 @@
 
         <ImageView
             android:id="@+id/item_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:src="@drawable/placeholder"
+            android:scaleType="centerInside"
             app:layout_constraintBottom_toTopOf="@id/item_footer_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +40,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:ellipsize="end"
                 android:gravity="center_vertical|start"
                 android:maxLines="1"
@@ -52,9 +53,8 @@
                 android:id="@+id/item_information_button"
                 android:layout_width="42dp"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="8dp"
                 android:background="@android:color/transparent"
-                android:padding="8dp"
+                android:padding="12dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_info"
                 app:layout_constraintBottom_toBottomOf="parent"

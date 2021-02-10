@@ -1,6 +1,7 @@
 package de.asta.hochschule.trier.verleih.rental.adapter
 
 import android.view.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -26,6 +27,10 @@ class RentalItemChoiceAdapter(
 	
 	override fun onBindViewHolder(holder: ViewHolder, position: Int, model: RentalObject) {
 		holder.itemBinding.itemNameText.text = model.name?.capitalize(Locale.getDefault())
+		
+		val width = holder.itemView.context.resources.displayMetrics.widthPixels / 3
+		val height = holder.itemView.context.resources.displayMetrics.heightPixels / 3
+		holder.itemBinding.itemImageView.layoutParams = ConstraintLayout.LayoutParams(width, height)
 		
 		val storageRef =
 			FirebaseStorage.getInstance().reference.child("objects/big/${model.picture_name}.jpg")
