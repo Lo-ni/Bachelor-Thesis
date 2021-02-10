@@ -1,8 +1,6 @@
 package de.asta.hochschule.trier.verleih.rental.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.*
-import com.google.gson.Gson
 import de.asta.hochschule.trier.verleih.helper.DateHelper
 import de.asta.hochschule.trier.verleih.rental.model.*
 import org.joda.time.DateTime
@@ -11,24 +9,19 @@ class NewRentalViewModel : ViewModel() {
 	
 	private val mutableRental = MutableLiveData<Rental>()
 	val rentalLiveData: LiveData<Rental> get() = mutableRental
+	private val mutableObjects = MutableLiveData<ArrayList<RentalObject>>()
+	val objectsLiveData: LiveData<ArrayList<RentalObject>> get() = mutableObjects
 	
 	fun addRentalObject(rentalObject: RentalObject) {
-		val rental = getRental()
-		if (rental?.objects == null) {
-			rental?.objects = mutableMapOf()
-		}
-		rentalObject.name?.let { rental?.objects?.put(it, mutableMapOf()) }
-		mutableRental.value = rental
-		
-		Log.d(TAG, Gson().toJson(mutableRental.value))
+		val list = getObjectList()
+		list?.add(rentalObject)
+		mutableObjects.value = list
 	}
 	
 	fun removeRentalObject(rentalObject: RentalObject) {
-		val rental = getRental()
-		rentalObject.name?.let { rental?.objects?.remove(it) }
-		mutableRental.value = rental
-		
-		Log.d(TAG, Gson().toJson(mutableRental.value))
+		val list = getObjectList()
+		list?.remove(rentalObject)
+		mutableObjects.value = list
 	}
 	
 	fun enterEventTitle(text: String) {
@@ -54,6 +47,14 @@ class NewRentalViewModel : ViewModel() {
 			mutableRental.value
 		} else {
 			Rental()
+		}
+	}
+	
+	private fun getObjectList(): ArrayList<RentalObject>? {
+		return if (mutableObjects.value != null) {
+			mutableObjects.value
+		} else {
+			ArrayList()
 		}
 	}
 	

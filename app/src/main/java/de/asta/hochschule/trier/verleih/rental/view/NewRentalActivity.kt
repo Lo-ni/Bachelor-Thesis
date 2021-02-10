@@ -2,7 +2,6 @@ package de.asta.hochschule.trier.verleih.rental.view
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -10,7 +9,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.ActivityNewRentalBinding
 import de.asta.hochschule.trier.verleih.rental.adapter.NewRentalPagerAdapter
-import de.asta.hochschule.trier.verleih.rental.model.Rental
+import de.asta.hochschule.trier.verleih.rental.model.*
 import de.asta.hochschule.trier.verleih.rental.viewmodel.NewRentalViewModel
 
 class NewRentalActivity : FragmentActivity() {
@@ -62,7 +61,15 @@ class NewRentalActivity : FragmentActivity() {
 		}
 		
 		binding.pagerNextButton.setOnClickListener {
-			if (!isValidInput(binding.newRentalPager.currentItem, viewModel.rentalLiveData.value)) {
+			if (binding.newRentalPager.currentItem == PAGE_OVERVIEW) {
+				Log.d(TAG, "save")
+			} else {
+				binding.newRentalPager.currentItem = binding.newRentalPager.currentItem + 1
+			}
+			
+			// TODO Uncomment after testing!
+			/*
+			if (!isValidInput(binding.newRentalPager.currentItem, viewModel.rentalLiveData.value, viewModel.objectsLiveData.value)) {
 				Toast.makeText(this, "Input invalid", Toast.LENGTH_SHORT).show()
 			} else {
 				if (binding.newRentalPager.currentItem == PAGE_OVERVIEW) {
@@ -71,10 +78,26 @@ class NewRentalActivity : FragmentActivity() {
 					binding.newRentalPager.currentItem = binding.newRentalPager.currentItem + 1
 				}
 			}
+			*/
 		}
 		
 		viewModel.rentalLiveData.observe(this, { rental ->
-			if (isValidInput(binding.newRentalPager.currentItem, rental)) {
+			if (isValidInput(
+					binding.newRentalPager.currentItem,
+					rental,
+					viewModel.objectsLiveData.value
+				)
+			) {
+				Log.d(TAG, "Valid input")
+			}
+		})
+		viewModel.objectsLiveData.observe(this, { objects ->
+			if (isValidInput(
+					binding.newRentalPager.currentItem,
+					viewModel.rentalLiveData.value,
+					objects
+				)
+			) {
 				Log.d(TAG, "Valid input")
 			}
 		})
@@ -89,7 +112,11 @@ class NewRentalActivity : FragmentActivity() {
 		}
 	}
 	
-	private fun isValidInput(page: Int, rental: Rental?): Boolean {
+	private fun isValidInput(
+		page: Int,
+		rental: Rental?,
+		objects: ArrayList<RentalObject>?
+	): Boolean {
 		when (page) {
 			PAGE_DATE_TIME -> {
 				if (rental?.eventname == null || rental.pickupdate == null || rental.returndate == null) {
@@ -98,13 +125,13 @@ class NewRentalActivity : FragmentActivity() {
 				return true
 			}
 			PAGE_ITEMS_CHOICE -> {
-				if (rental?.objects == null) {
+				if (objects == null || objects.size == 0) {
 					return false
 				}
 				return true
 			}
 			PAGE_ITEMS_QUANTITY -> {
-				if (rental?.objects == null) {
+				if (rental?.objects == null || rental.objects?.size != objects?.size) {
 					return false
 				}
 				return true
