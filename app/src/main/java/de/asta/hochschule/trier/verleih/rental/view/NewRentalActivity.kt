@@ -35,21 +35,16 @@ class NewRentalActivity : FragmentActivity() {
 		binding.newRentalPager.registerOnPageChangeCallback(object :
 			ViewPager2.OnPageChangeCallback() {
 			
-			override fun onPageScrollStateChanged(state: Int) {
-				Log.d(TAG, "page scroll state changed $state")
-			}
+			override fun onPageScrollStateChanged(state: Int) {}
 			
 			override fun onPageScrolled(
 				position: Int,
 				positionOffset: Float,
 				positionOffsetPixels: Int
 			) {
-				Log.d(TAG, "page scrolled $position")
-				
 			}
 			
 			override fun onPageSelected(position: Int) {
-				Log.d(TAG, "page selected $position")
 				if (position == PAGE_OVERVIEW) {
 					binding.pagerNextButton.setImageResource(R.drawable.ic_check)
 				}

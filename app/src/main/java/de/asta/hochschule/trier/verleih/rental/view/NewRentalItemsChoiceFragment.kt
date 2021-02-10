@@ -40,7 +40,7 @@ class NewRentalItemsChoiceFragment : Fragment(R.layout.fragment_new_rental_items
 		bottomSheetDialog?.setContentView(bottomSheetBinding.root)
 		
 		val query =
-			FirebaseDatabase.getInstance().reference.child("objects")//.orderByChild("name").startAt("A")
+			FirebaseDatabase.getInstance().reference.child("objects").orderByChild("name")
 		val options =
 			FirebaseRecyclerOptions.Builder<RentalObject>()
 				.setQuery(query, RentalObject::class.java)
@@ -55,10 +55,13 @@ class NewRentalItemsChoiceFragment : Fragment(R.layout.fragment_new_rental_items
 			} else {
 				viewModel.removeRentalObject(model)
 			}
-		})
+		}, viewModel.objectsLiveData.value)
 		binding.itemsRecyclerview.layoutManager = GridLayoutManager(this.context, 3)
-		
 		binding.itemsRecyclerview.adapter = adapter
+		
+		viewModel.objectsLiveData.observe(requireActivity(), {
+			adapter = adapter.resetSelectedItems(it)
+		})
 	}
 	
 	override fun onStart() {

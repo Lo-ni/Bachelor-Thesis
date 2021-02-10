@@ -13,7 +13,8 @@ import de.asta.hochschule.trier.verleih.util.GlideApp
 class RentalItemChoiceAdapter(
 	options: FirebaseRecyclerOptions<RentalObject>,
 	private val showBottomSheetDialog: (RentalObject) -> Unit,
-	private val selectItem: (RentalObject, Boolean) -> Unit
+	private val selectItem: (RentalObject, Boolean) -> Unit,
+	private var selectedItems: ArrayList<RentalObject>?
 ) : FirebaseRecyclerAdapter<
 		RentalObject, RentalItemChoiceAdapter.ViewHolder>(options) {
 	
@@ -33,33 +34,44 @@ class RentalItemChoiceAdapter(
 		holder.itemBinding.itemImageView.layoutParams = ConstraintLayout.LayoutParams(size, size)
 		
 		val storageRef =
-			FirebaseStorage.getInstance().reference.child("objects/big/${model.picture_name}")
+			FirebaseStorage.getInstance().reference.child("objects/big/${model.picture_name}.jpg")
 		GlideApp.with(holder.itemView.context).load(storageRef)
 			.placeholder(R.drawable.placeholder)
 			.into(holder.itemBinding.itemImageView)
 		
 		holder.itemBinding.itemImageView.setOnClickListener {
 			holder.isSelected = !holder.isSelected
-			if (holder.isSelected) {
+			val colorResId: Int = if (holder.isSelected) {
 				selectItem.invoke(model, true)
-				holder.itemBinding.itemChoiceCard.setCardBackgroundColor(
-					holder.itemView.context.getColor(
-						R.color.colorSecondaryLight
-					)
-				)
+				R.color.colorSecondaryLight
 			} else {
 				selectItem.invoke(model, false)
-				holder.itemBinding.itemChoiceCard.setCardBackgroundColor(
-					holder.itemView.context.getColor(
-						R.color.surface
-					)
-				)
+				R.color.surface
+				
 			}
+			holder.itemBinding.itemChoiceCard.setCardBackgroundColor(
+				holder.itemView.context.getColor(colorResId)
+			)
 		}
 		
 		holder.itemBinding.itemInformationButton.setOnClickListener {
 			showBottomSheetDialog.invoke(model)
 		}
+		
+		val colorResId = if (selectedItems?.contains(model) == true) {
+			R.color.colorSecondaryLight
+		} else {
+			R.color.surface
+		}
+		holder.itemBinding.itemChoiceCard.setCardBackgroundColor(
+			holder.itemView.context.getColor(colorResId)
+		)
+	}
+	
+	fun resetSelectedItems(items: ArrayList<RentalObject>): RentalItemChoiceAdapter {
+		selectedItems = items
+		notifyDataSetChanged()
+		return this
 	}
 	
 	class ViewHolder(val itemBinding: RowItemChoiceBinding) :
