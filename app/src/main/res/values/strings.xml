@@ -28,4 +28,5 @@
     <string name="past_title">Vergangen</string>
     <string name="no_past_rental">Es existieren noch keine vergangenen Reservierungen.</string>
     <string name="recent_title">Aktuell</string>
+    <string name="rental_time_range">Verleihzeitraum</string>
 </resources>

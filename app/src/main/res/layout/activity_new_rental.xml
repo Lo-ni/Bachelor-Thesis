@@ -20,22 +20,59 @@
             app:title="@string/new_rental" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/new_rental_pager"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pager_tabs_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:elevation="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appbar_layout">
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.tabs.TabLayout
+            android:id="@+id/new_rental_pager_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:tabBackground="@drawable/tab_selector"
             app:tabGravity="center"
             app:tabIndicatorGravity="bottom"
             app:tabIndicatorHeight="0dp" />
-    </androidx.viewpager.widget.ViewPager>
+
+        <ImageButton
+            android:id="@+id/pager_back_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_chevron_left"
+            app:layout_constraintBottom_toBottomOf="@id/new_rental_pager_tabs"
+            app:layout_constraintStart_toStartOf="@id/new_rental_pager_tabs" />
+
+        <ImageButton
+            android:id="@+id/pager_next_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_chevron_right"
+            app:layout_constraintBottom_toBottomOf="@id/new_rental_pager_tabs"
+            app:layout_constraintEnd_toEndOf="@id/new_rental_pager_tabs" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/new_rental_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:elevation="0dp"
+        app:layout_constraintBottom_toTopOf="@id/pager_tabs_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

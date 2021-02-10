@@ -13,6 +13,8 @@
         <item name="colorControlActivated">@color/colorPrimaryDark</item>
         <item name="colorControlNormal">@color/colorSecondaryLight</item>
         <item name="colorControlHighlight">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorSecondary</item>
+        <item name="colorOnSurface">@color/colorSecondary</item>
         <item name="materialButtonStyle">@style/MaterialButton</item>
         <item name="sliderStyle">@style/Slider</item>
         <item name="textAppearanceHeadline1">@style/Headline1</item>
@@ -31,6 +33,7 @@
         <item name="android:textViewStyle">@style/Body2</item>
         <item name="textInputStyle">@style/OutlinedBox</item>
         <item name="floatingActionButtonStyle">@style/FloatingActionButton</item>
+        <item name="materialCalendarFullscreenTheme">@style/MaterialCalendarOverlay</item>
     </style>
 
     <style name="FirebaseTheme" parent="FirebaseUI">
@@ -45,6 +48,15 @@
         <item name="android:textColor">@color/colorSecondary</item>
         <item name="android:windowBackground">@color/colorPrimary</item>
         <item name="android:editTextColor">@color/colorSecondaryLight</item>
+        <item name="materialCalendarFullscreenTheme">@style/MaterialCalendarOverlay</item>
+    </style>
+
+    <style name="MaterialCalendarOverlay" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar.Fullscreen">
+        <item name="materialCalendarStyle">@style/MaterialCalendar</item>
+    </style>
+
+    <style name="MaterialCalendar" parent="@style/Widget.MaterialComponents.MaterialCalendar.Fullscreen">
+        <item name="android:windowFullscreen">false</item>
     </style>
 
     <style name="RadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
