@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_rental_main"
-        android:name="de.asta.hochschule.trier.verleih.rental.fragment.RentalMainFragment"
+        android:name="de.asta.hochschule.trier.verleih.rental.view.RentalMainFragment"
         android:label="RentalMainFragment"
         tools:layout="@layout/fragment_rental_main" />
     <fragment

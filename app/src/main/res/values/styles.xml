@@ -30,6 +30,7 @@
         <item name="textAppearanceOverline">@style/Overline</item>
         <item name="android:textViewStyle">@style/Body2</item>
         <item name="textInputStyle">@style/OutlinedBox</item>
+        <item name="floatingActionButtonStyle">@style/FloatingActionButton</item>
     </style>
 
     <style name="FirebaseTheme" parent="FirebaseUI">
@@ -81,6 +82,7 @@
         <item name="sdMainFabOpenedBackgroundColor">@color/colorSecondary</item>
         <item name="backgroundTint">@color/colorSecondary</item>
         <item name="tint">@color/onSecondary</item>
+        <item name="rippleColor">@color/onSecondary</item>
     </style>
 
     <style name="ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">

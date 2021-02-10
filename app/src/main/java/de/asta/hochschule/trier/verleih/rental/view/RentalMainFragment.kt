@@ -1,5 +1,6 @@
-package de.asta.hochschule.trier.verleih.rental.fragment
+package de.asta.hochschule.trier.verleih.rental.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.*
@@ -44,6 +45,11 @@ class RentalMainFragment : Fragment(R.layout.fragment_rental_main) {
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		
+		binding.rentalsFab.setOnClickListener {
+			val intent = Intent(context, NewRentalActivity::class.java)
+			startActivity(intent)
+		}
 		
 		val queryRecent =
 			FirebaseDatabase.getInstance().reference.child("rentals").orderByChild("returndate")

@@ -25,6 +25,9 @@
             android:configChanges="uiMode"
             android:launchMode="singleTop" />
         <activity android:name=".signIn.activity.SignInActivity" />
+        <activity
+            android:name=".rental.view.NewRentalActivity"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>
