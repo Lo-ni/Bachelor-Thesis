@@ -12,7 +12,7 @@ import de.asta.hochschule.trier.verleih.util.GlideApp
 
 class RentalItemOverviewAdapter(
 	private var objects: ArrayList<RentalObject>?,
-	private var components: MutableMap<String, MutableMap<String, Int>>?
+	private var components: MutableMap<String, MutableMap<String, Int>?>?
 ) :
 	RecyclerView.Adapter<RentalItemOverviewAdapter.ViewHolder>() {
 	override fun onCreateViewHolder(
@@ -41,7 +41,7 @@ class RentalItemOverviewAdapter(
 	
 	fun resetData(
 		objs: ArrayList<RentalObject>?,
-		comps: MutableMap<String, MutableMap<String, Int>>?
+		comps: MutableMap<String, MutableMap<String, Int>?>?
 	): RentalItemOverviewAdapter {
 		objects = objs
 		components = comps

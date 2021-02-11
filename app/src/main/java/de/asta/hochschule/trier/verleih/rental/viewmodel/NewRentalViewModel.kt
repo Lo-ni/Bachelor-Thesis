@@ -16,10 +16,31 @@ class NewRentalViewModel : ViewModel() {
 	private val mutableObjects = MutableLiveData<ArrayList<RentalObject>>()
 	val objectsLiveData: LiveData<ArrayList<RentalObject>> get() = mutableObjects
 	private val mutableRentalObjects =
-		MutableLiveData<MutableMap<String, MutableMap<String, Int>>>()
-	val rentalObjectsLiveData: LiveData<MutableMap<String, MutableMap<String, Int>>> get() = mutableRentalObjects
+		MutableLiveData<MutableMap<String, MutableMap<String, Int>?>>()
+	val rentalObjectsLiveData: LiveData<MutableMap<String, MutableMap<String, Int>?>> get() = mutableRentalObjects
 	private val mutableNote = MutableLiveData<String>()
 	val noteLiveData: LiveData<String> get() = mutableNote
+	
+	fun buildRental(): Rental? {
+		val rental = getRental()
+		val rentalObjects = getRentalObjects()
+		val note = mutableNote.value
+		val timestamp = System.currentTimeMillis().toString()
+		
+		rental?.objects = rentalObjects
+		if (note != null) {
+			if (rental?.notes == null) {
+				rental?.notes = mutableMapOf()
+			}
+			rental?.notes?.put(timestamp, note)
+		}
+		rental?.timestamp = timestamp
+		rental?.status = "In Bearbeitung"
+		
+		mutableRental.value = rental
+		Log.d(TAG, Gson().toJson(mutableRental.value))
+		return rental
+	}
 	
 	fun updateQuantity(rentalObject: RentalObject, component: Pair<String, Int>, quantity: Int) {
 		val rentalObjects = getRentalObjects()
@@ -35,7 +56,6 @@ class NewRentalViewModel : ViewModel() {
 			}
 		}
 		mutableRentalObjects.value = rentalObjects
-		Log.d(TAG, "rental objects ${Gson().toJson(mutableRentalObjects.value)}")
 	}
 	
 	fun addRentalObject(rentalObject: RentalObject, context: Context?) {
@@ -59,7 +79,6 @@ class NewRentalViewModel : ViewModel() {
 			rentalObject.picture_name?.let { rentalObjects.put(it, newMutableMap) }
 			mutableRentalObjects.value = rentalObjects
 		}
-		Log.d(TAG, "rental objects ${Gson().toJson(mutableRentalObjects.value)}")
 	}
 	
 	fun removeRentalObject(rentalObject: RentalObject) {
@@ -71,7 +90,6 @@ class NewRentalViewModel : ViewModel() {
 		val rentalObjects = getRentalObjects()
 		rentalObjects?.remove(rentalObject.picture_name)
 		mutableRentalObjects.value = rentalObjects
-		Log.d(TAG, "rental objects ${Gson().toJson(mutableRentalObjects.value)}")
 	}
 	
 	fun enterEventNote(text: String) {
@@ -112,7 +130,7 @@ class NewRentalViewModel : ViewModel() {
 		}
 	}
 	
-	private fun getRentalObjects(): MutableMap<String, MutableMap<String, Int>>? {
+	private fun getRentalObjects(): MutableMap<String, MutableMap<String, Int>?>? {
 		return if (mutableRentalObjects.value != null) {
 			mutableRentalObjects.value
 		} else {

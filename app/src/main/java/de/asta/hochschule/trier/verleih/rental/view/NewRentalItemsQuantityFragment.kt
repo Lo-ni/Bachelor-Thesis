@@ -61,10 +61,10 @@ class NewRentalItemsQuantityFragment : Fragment(R.layout.fragment_new_rental_ite
 						}
 					})
 					snackBar.show()
-				},
-				{ o, component, quantity, position ->
-					viewModel.updateQuantity(o, component, quantity)
-				})
+				}
+			) { o, component, quantity, position ->
+				viewModel.updateQuantity(o, component, quantity)
+			}
 		binding.itemsRecyclerview.adapter = adapter
 		
 		viewModel.objectsLiveData.observe(requireActivity(), { objects ->

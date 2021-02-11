@@ -60,6 +60,7 @@ class NewRentalActivity : FragmentActivity() {
 			} else {
 				if (binding.newRentalPager.currentItem == PAGE_OVERVIEW) {
 					Log.d(TAG, "save")
+					val rental = viewModel.buildRental()
 				} else {
 					binding.newRentalPager.currentItem = binding.newRentalPager.currentItem + 1
 				}
@@ -121,7 +122,7 @@ class NewRentalActivity : FragmentActivity() {
 		page: Int,
 		rental: Rental?,
 		objects: ArrayList<RentalObject>?,
-		rentalObjects: MutableMap<String, MutableMap<String, Int>>?
+		rentalObjects: MutableMap<String, MutableMap<String, Int>?>?
 	): Boolean {
 		when (page) {
 			PAGE_DATE_TIME -> {
@@ -139,10 +140,13 @@ class NewRentalActivity : FragmentActivity() {
 			PAGE_ITEMS_QUANTITY -> {
 				var validItems = 0
 				rentalObjects?.forEach { obj ->
-					for (comp in obj.value) {
-						if (comp.value > 0) {
-							++validItems
-							break
+					val objValues = obj.value
+					if (objValues != null) {
+						for (comp in objValues) {
+							if (comp.value > 0) {
+								++validItems
+								break
+							}
 						}
 					}
 				}

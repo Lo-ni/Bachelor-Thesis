@@ -10,7 +10,7 @@ import de.asta.hochschule.trier.verleih.util.GlideApp
 
 class RentalItemQuantityAdapter(
 	private var objects: ArrayList<RentalObject>?,
-	private var components: MutableMap<String, MutableMap<String, Int>>?,
+	private var components: MutableMap<String, MutableMap<String, Int>?>?,
 	private val removeItem: (RentalObject?, MutableMap<String, Int>?, Int) -> Unit,
 	private val updateQuantity: (RentalObject, Pair<String, Int>, Int, Int) -> Unit
 ) :
@@ -51,7 +51,7 @@ class RentalItemQuantityAdapter(
 	
 	fun resetData(
 		objs: ArrayList<RentalObject>?,
-		comps: MutableMap<String, MutableMap<String, Int>>?
+		comps: MutableMap<String, MutableMap<String, Int>?>?
 	): RentalItemQuantityAdapter {
 		objects = objs
 		components = comps
