@@ -39,13 +39,23 @@ class RentalItemChoiceAdapter(
 			.placeholder(R.drawable.placeholder)
 			.into(holder.itemBinding.itemImageView)
 		
+		holder.isSelected = selectedItems?.contains(model) == true
+		var colorResId = if (selectedItems?.contains(model) == true) {
+			R.color.colorSecondaryLight
+		} else {
+			R.color.surface
+		}
+		holder.itemBinding.itemChoiceCard.setCardBackgroundColor(
+			holder.itemView.context.getColor(colorResId)
+		)
+		
 		holder.itemBinding.itemImageView.setOnClickListener {
 			holder.isSelected = !holder.isSelected
-			val colorResId: Int = if (holder.isSelected) {
-				selectItem.invoke(model, true)
+			selectItem.invoke(model, holder.isSelected)
+			
+			colorResId = if (holder.isSelected) {
 				R.color.colorSecondaryLight
 			} else {
-				selectItem.invoke(model, false)
 				R.color.surface
 				
 			}
@@ -57,15 +67,6 @@ class RentalItemChoiceAdapter(
 		holder.itemBinding.itemInformationButton.setOnClickListener {
 			showBottomSheetDialog.invoke(model)
 		}
-		
-		val colorResId = if (selectedItems?.contains(model) == true) {
-			R.color.colorSecondaryLight
-		} else {
-			R.color.surface
-		}
-		holder.itemBinding.itemChoiceCard.setCardBackgroundColor(
-			holder.itemView.context.getColor(colorResId)
-		)
 	}
 	
 	fun resetSelectedItems(items: ArrayList<RentalObject>): RentalItemChoiceAdapter {
@@ -76,7 +77,7 @@ class RentalItemChoiceAdapter(
 	
 	class ViewHolder(val itemBinding: RowItemChoiceBinding) :
 		RecyclerView.ViewHolder(itemBinding.root) {
-		var isSelected = false
+		var isSelected: Boolean = false
 	}
 	
 	companion object {

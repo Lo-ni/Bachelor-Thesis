@@ -6,14 +6,14 @@ class RentalObject() {
 	var description: String? = null
 	var picture_name: String? = null
 	var quantity: Int? = null
-	var components: MutableMap<String, MutableMap<String, Any>>? = null
+	var components: MutableMap<String, Int>? = null
 	
 	constructor(
 		name: String?,
 		description: String?,
 		picture_name: String?,
 		quantity: Int?,
-		components: MutableMap<String, MutableMap<String, Any>>?
+		components: MutableMap<String, Int>?
 	) : this() {
 		this.name = name
 		this.description = description
