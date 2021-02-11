@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.database.FirebaseDatabase
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.ActivityNewRentalBinding
 import de.asta.hochschule.trier.verleih.rental.adapter.NewRentalPagerAdapter
@@ -61,6 +62,9 @@ class NewRentalActivity : FragmentActivity() {
 				if (binding.newRentalPager.currentItem == PAGE_OVERVIEW) {
 					Log.d(TAG, "save")
 					val rental = viewModel.buildRental()
+					val firebaseRef = FirebaseDatabase.getInstance().reference.child("rentals")
+					firebaseRef.push().setValue(rental)
+					finish()
 				} else {
 					binding.newRentalPager.currentItem = binding.newRentalPager.currentItem + 1
 				}
@@ -101,7 +105,6 @@ class NewRentalActivity : FragmentActivity() {
 				Log.d(TAG, "Valid input")
 			}
 		})
-		
 	}
 	
 	override fun onBackPressed() {
