@@ -85,9 +85,9 @@ class RentalItemQuantityAdapter(
 			itemBinding.itemQuantityRecyclerView.adapter = RentalItemQuantitySelectionAdapter(
 				components,
 				selectedQuantities
-			) { quantity, position ->
+			) { component, quantity, position ->
 				// TODO placeholder - change quantity
-				Log.d(TAG, "change quantity $quantity at $position")
+				Log.d(TAG, "change quantity of ${component.first} to $quantity at pos $position")
 			}
 		}
 	}
