@@ -32,7 +32,7 @@ class NewRentalItemsQuantityFragment : Fragment(R.layout.fragment_new_rental_ite
 		
 		binding.itemsRecyclerview.layoutManager = LinearLayoutManager(context)
 		adapter =
-			RentalItemQuantityAdapter(viewModel.objectsLiveData.value) { rentalObject, position ->
+			RentalItemQuantityAdapter(viewModel.objectsLiveData.value, { rentalObject, position ->
 				// remove object from recyclerview only
 				adapter?.removeObject(rentalObject, position)
 				
@@ -58,7 +58,9 @@ class NewRentalItemsQuantityFragment : Fragment(R.layout.fragment_new_rental_ite
 					}
 				})
 				snackbar.show()
-			}
+			}, { rentalObject, component, quantity ->
+				rentalObject?.let { viewModel.updateQuantity(it, component, quantity) }
+			})
 		binding.itemsRecyclerview.adapter = adapter
 		
 		viewModel.objectsLiveData.observe(requireActivity(), { objects ->

@@ -51,7 +51,7 @@ class NewRentalItemsChoiceFragment : Fragment(R.layout.fragment_new_rental_items
 			bottomSheetDialog?.show()
 		}, { model, isSelected ->
 			if (isSelected) {
-				viewModel.addRentalObject(model)
+				viewModel.addRentalObject(model, context)
 			} else {
 				viewModel.removeRentalObject(model)
 			}

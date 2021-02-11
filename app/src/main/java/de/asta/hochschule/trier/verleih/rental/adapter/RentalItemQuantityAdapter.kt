@@ -11,7 +11,8 @@ import de.asta.hochschule.trier.verleih.util.GlideApp
 
 class RentalItemQuantityAdapter(
 	private var objects: ArrayList<RentalObject>?,
-	private val removeItem: (RentalObject?, Int) -> Unit
+	private val removeItem: (RentalObject?, Int) -> Unit,
+	private val updateItemQuantity: (RentalObject?, Pair<String, Int>, Int) -> Unit
 ) :
 	RecyclerView.Adapter<RentalItemQuantityAdapter.ViewHolder>() {
 	
@@ -22,7 +23,7 @@ class RentalItemQuantityAdapter(
 				parent,
 				false
 			)
-		return ViewHolder(itemBinding, removeItem)
+		return ViewHolder(itemBinding, removeItem, updateItemQuantity)
 	}
 	
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -53,9 +54,13 @@ class RentalItemQuantityAdapter(
 	
 	class ViewHolder(
 		private val itemBinding: RowItemQuantityOverviewBinding,
-		private val removeItem: (RentalObject?, Int) -> Unit
+		private val removeItem: (RentalObject?, Int) -> Unit,
+		private val updateItemQuantity: (RentalObject?, Pair<String, Int>, Int) -> Unit
 	) :
 		RecyclerView.ViewHolder(itemBinding.root) {
+		
+		private lateinit var adapter: RentalItemQuantitySelectionAdapter
+		
 		fun bind(rentalObject: RentalObject?) {
 			itemBinding.itemTitle.text = rentalObject?.name
 			
@@ -82,13 +87,19 @@ class RentalItemQuantityAdapter(
 			
 			itemBinding.itemQuantityRecyclerView.layoutManager =
 				LinearLayoutManager(itemView.context)
-			itemBinding.itemQuantityRecyclerView.adapter = RentalItemQuantitySelectionAdapter(
+			
+			adapter = RentalItemQuantitySelectionAdapter(
 				components,
 				selectedQuantities
 			) { component, quantity, position ->
 				// TODO placeholder - change quantity
 				Log.d(TAG, "change quantity of ${component.first} to $quantity at pos $position")
+				// update adapter
+				adapter = adapter.updateSelectedItemQuantity(quantity, position)
+				// update quantity in shared viewmodel
+				updateItemQuantity.invoke(rentalObject, component, quantity)
 			}
+			itemBinding.itemQuantityRecyclerView.adapter = adapter
 		}
 	}
 	

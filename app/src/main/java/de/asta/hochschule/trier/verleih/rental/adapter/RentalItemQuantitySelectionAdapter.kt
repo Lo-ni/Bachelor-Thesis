@@ -8,7 +8,7 @@ import de.asta.hochschule.trier.verleih.databinding.RowItemQuantitySelectBinding
 
 class RentalItemQuantitySelectionAdapter(
 	private var components: Map<String, Int>?,
-	private var selectedQuantities: List<Int>?,
+	private var selectedQuantities: ArrayList<Int>?,
 	private val changeQuantity: (Pair<String, Int>, Int, Int) -> Unit
 ) :
 	RecyclerView.Adapter<RentalItemQuantitySelectionAdapter.ViewHolder>() {
@@ -29,6 +29,15 @@ class RentalItemQuantitySelectionAdapter(
 	
 	override fun getItemCount(): Int {
 		return components?.size ?: 0
+	}
+	
+	fun updateSelectedItemQuantity(
+		quantity: Int,
+		position: Int
+	): RentalItemQuantitySelectionAdapter {
+		selectedQuantities?.set(position, quantity)
+		notifyItemChanged(position)
+		return this
 	}
 	
 	class ViewHolder(
