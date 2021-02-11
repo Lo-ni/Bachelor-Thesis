@@ -33,7 +33,6 @@ class NewRentalViewModel : ViewModel() {
 			}
 		}
 		mutableRentalObjects.value = rentalObjects
-		
 		Log.d(TAG, "rental objects ${Gson().toJson(mutableRentalObjects.value)}")
 	}
 	

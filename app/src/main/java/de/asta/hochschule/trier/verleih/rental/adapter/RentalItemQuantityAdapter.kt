@@ -1,6 +1,5 @@
 package de.asta.hochschule.trier.verleih.rental.adapter
 
-import android.util.Log
 import android.view.*
 import androidx.recyclerview.widget.*
 import com.google.firebase.storage.FirebaseStorage
@@ -11,8 +10,9 @@ import de.asta.hochschule.trier.verleih.util.GlideApp
 
 class RentalItemQuantityAdapter(
 	private var objects: ArrayList<RentalObject>?,
-	private val removeItem: (RentalObject?, Int) -> Unit,
-	private val updateItemQuantity: (RentalObject?, Pair<String, Int>, Int) -> Unit
+	private var components: MutableMap<String, MutableMap<String, Int>>?,
+	private val removeItem: (RentalObject?, MutableMap<String, Int>?, Int) -> Unit,
+	private val updateQuantity: (RentalObject, Pair<String, Int>, Int, Int) -> Unit
 ) :
 	RecyclerView.Adapter<RentalItemQuantityAdapter.ViewHolder>() {
 	
@@ -23,82 +23,67 @@ class RentalItemQuantityAdapter(
 				parent,
 				false
 			)
-		return ViewHolder(itemBinding, removeItem, updateItemQuantity)
+		
+		return ViewHolder(itemBinding, removeItem, updateQuantity)
 	}
 	
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-		holder.bind(objects?.get(position))
+		val obj = objects?.get(position)
+		val objComponents = components?.get(obj?.picture_name)
+		holder.bind(obj, objComponents)
 	}
 	
 	override fun getItemCount(): Int {
 		return objects?.size ?: 0
 	}
 	
-	fun removeObject(rentalObject: RentalObject?, position: Int) {
-		objects?.remove(rentalObject)
+	fun removeObject(obj: RentalObject?, position: Int) {
+		objects?.remove(obj)
 		notifyItemRemoved(position)
 	}
 	
-	fun addObject(rentalObject: RentalObject?, position: Int) {
-		if (rentalObject != null) {
-			objects?.add(position, rentalObject)
+	fun addObject(obj: RentalObject?, position: Int) {
+		if (obj != null) {
+			objects?.add(position, obj)
 			notifyItemInserted(position)
 		}
 	}
 	
-	fun resetObjects(resetObjects: ArrayList<RentalObject>): RentalItemQuantityAdapter {
-		objects = resetObjects
+	fun resetData(
+		objs: ArrayList<RentalObject>?,
+		comps: MutableMap<String, MutableMap<String, Int>>?
+	): RentalItemQuantityAdapter {
+		objects = objs
+		components = comps
 		notifyDataSetChanged()
 		return this
 	}
 	
 	class ViewHolder(
 		private val itemBinding: RowItemQuantityOverviewBinding,
-		private val removeItem: (RentalObject?, Int) -> Unit,
-		private val updateItemQuantity: (RentalObject?, Pair<String, Int>, Int) -> Unit
+		private val removeItem: (RentalObject?, MutableMap<String, Int>?, Int) -> Unit,
+		private val updateQuantity: (RentalObject, Pair<String, Int>, Int, Int) -> Unit
 	) :
 		RecyclerView.ViewHolder(itemBinding.root) {
 		
 		private lateinit var adapter: RentalItemQuantitySelectionAdapter
 		
-		fun bind(rentalObject: RentalObject?) {
-			itemBinding.itemTitle.text = rentalObject?.name
+		fun bind(obj: RentalObject?, objComponents: MutableMap<String, Int>?) {
+			itemBinding.itemTitle.text = obj?.name
 			
 			val storageRef =
-				FirebaseStorage.getInstance().reference.child("objects/round/${rentalObject?.picture_name}.png")
+				FirebaseStorage.getInstance().reference.child("objects/round/${obj?.picture_name}.png")
 			GlideApp.with(itemView.context).load(storageRef)
 				.placeholder(R.drawable.placeholder)
 				.into(itemBinding.itemCircleImageView)
 			
 			itemBinding.itemDeleteButton.setOnClickListener {
-				removeItem.invoke(rentalObject, adapterPosition)
+				removeItem.invoke(obj, objComponents, adapterPosition)
 			}
-			
-			var components: MutableMap<String, Int>? = mutableMapOf()
-			if (rentalObject?.components == null) {
-				rentalObject?.quantity?.let {
-					components?.put(itemView.context.getString(R.string.quantity), it)
-				}
-			} else {
-				components = rentalObject.components
-			}
-			val selectedQuantities = ArrayList<Int>()
-			components?.forEach { _ -> selectedQuantities.add(0) }
 			
 			itemBinding.itemQuantityRecyclerView.layoutManager =
 				LinearLayoutManager(itemView.context)
-			
-			adapter = RentalItemQuantitySelectionAdapter(
-				components,
-				selectedQuantities
-			) { component, quantity, position ->
-				// TODO placeholder - change quantity
-				Log.d(TAG, "change quantity of ${component.first} to $quantity at pos $position")
-				// update adapter
-				adapter = adapter.updateSelectedItemQuantity(quantity, position)
-				// update quantity in shared viewmodel
-				updateItemQuantity.invoke(rentalObject, component, quantity)
-			}
+			adapter = RentalItemQuantitySelectionAdapter(objComponents, obj, updateQuantity)
 			itemBinding.itemQuantityRecyclerView.adapter = adapter
 		}
 	}

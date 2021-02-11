@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
+import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.RowItemQuantitySelectBinding
+import de.asta.hochschule.trier.verleih.rental.model.RentalObject
 
 class RentalItemQuantitySelectionAdapter(
-	private var components: Map<String, Int>?,
-	private var selectedQuantities: ArrayList<Int>?,
-	private val changeQuantity: (Pair<String, Int>, Int, Int) -> Unit
+	private var objComponents: MutableMap<String, Int>?,
+	private var obj: RentalObject?,
+	private val updateQuantity: (RentalObject, Pair<String, Int>, Int, Int) -> Unit
 ) :
 	RecyclerView.Adapter<RentalItemQuantitySelectionAdapter.ViewHolder>() {
 	
@@ -20,55 +22,65 @@ class RentalItemQuantitySelectionAdapter(
 				parent,
 				false
 			)
-		return ViewHolder(itemBinding, changeQuantity)
+		
+		return ViewHolder(itemBinding, updateQuantity)
 	}
 	
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-		holder.bind(components?.toList()?.get(position), selectedQuantities?.get(position))
+		val component = objComponents?.toList()?.get(position)
+		holder.bind(component, obj)
 	}
 	
 	override fun getItemCount(): Int {
-		return components?.size ?: 0
+		return objComponents?.size ?: 0
 	}
 	
-	fun updateSelectedItemQuantity(
-		quantity: Int,
+	fun updateComponents(
+		updatedComponent: Pair<String, Int>,
 		position: Int
-	): RentalItemQuantitySelectionAdapter {
-		selectedQuantities?.set(position, quantity)
+	) {
+		objComponents?.replace(updatedComponent.first, updatedComponent.second)
 		notifyItemChanged(position)
-		return this
 	}
 	
 	class ViewHolder(
 		private val itemBinding: RowItemQuantitySelectBinding,
-		private val changeQuantity: (Pair<String, Int>, Int, Int) -> Unit
+		private val changeQuantity: (RentalObject, Pair<String, Int>, Int, Int) -> Unit
 	) :
 		RecyclerView.ViewHolder(itemBinding.root) {
 		@SuppressLint("SetTextI18n")
-		fun bind(component: Pair<String, Int>?, quantity: Int?) {
+		fun bind(component: Pair<String, Int>?, obj: RentalObject?) {
 			itemBinding.itemQuantityDescriptionText.text = "${component?.first}:"
-			itemBinding.itemQuantityText.text = "$quantity"
+			itemBinding.itemQuantityText.text = component?.second.toString()
 			
 			if (component != null) {
-				when {
-					component.second < 5 -> {
-						setupChips(-1, +1, null, null, component, quantity)
+				val maxQuantity =
+					if (component.first == itemView.context.getString(R.string.quantity)) {
+						obj?.quantity
+					} else {
+						obj?.components?.get(component.first)
 					}
-					component.second in 6..25 -> {
-						setupChips(-5, -1, +1, +5, component, quantity)
-					}
-					component.second in 26..50 -> {
-						setupChips(-10, -5, +5, +10, component, quantity)
-					}
-					component.second in 51..250 -> {
-						setupChips(-50, -10, +10, +50, component, quantity)
-					}
-					component.second in 251..500 -> {
-						setupChips(-100, -50, +50, +100, component, quantity)
-					}
-					else -> {
-						setupChips(-200, -100, +100, +200, component, quantity)
+				
+				if (maxQuantity != null) {
+					when {
+						maxQuantity < 5 -> {
+							setupChips(-1, +1, null, null, component, obj, maxQuantity)
+						}
+						maxQuantity in 6..25 -> {
+							setupChips(-5, -1, +1, +5, component, obj, maxQuantity)
+						}
+						maxQuantity in 26..50 -> {
+							setupChips(-10, -5, +5, +10, component, obj, maxQuantity)
+						}
+						maxQuantity in 51..250 -> {
+							setupChips(-50, -10, +10, +50, component, obj, maxQuantity)
+						}
+						maxQuantity in 251..500 -> {
+							setupChips(-100, -50, +50, +100, component, obj, maxQuantity)
+						}
+						else -> {
+							setupChips(-200, -100, +100, +200, component, obj, maxQuantity)
+						}
 					}
 				}
 			}
@@ -81,7 +93,8 @@ class RentalItemQuantitySelectionAdapter(
 			val3: Int?,
 			val4: Int?,
 			component: Pair<String, Int>?,
-			quantity: Int?
+			obj: RentalObject?,
+			maxQuantity: Int?
 		) {
 			itemBinding.chip3.visibility = if (val3 == null) {
 				View.GONE
@@ -95,23 +108,23 @@ class RentalItemQuantitySelectionAdapter(
 			}
 			
 			itemBinding.chip1.text = "$val1"
-			setupChipListener(itemBinding.chip1, val1, component, quantity)
+			setupChipListener(itemBinding.chip1, val1, component, obj)
 			itemBinding.chip2.text = if (val2 > 0) {
 				"+$val2"
 			} else {
 				"$val2"
 			}
-			setupChipListener(itemBinding.chip2, val2, component, quantity)
+			setupChipListener(itemBinding.chip2, val2, component, obj)
 			if (val3 != null) {
 				itemBinding.chip3.text = "+$val3"
-				setupChipListener(itemBinding.chip3, val3, component, quantity)
+				setupChipListener(itemBinding.chip3, val3, component, obj)
 			}
 			if (val4 != null) {
 				itemBinding.chip4.text = "+$val4"
-				setupChipListener(itemBinding.chip4, val4, component, quantity)
+				setupChipListener(itemBinding.chip4, val4, component, obj)
 			}
 			
-			disableChips(val1, val2, val3, val4, component?.second, quantity)
+			disableChips(val1, val2, val3, val4, maxQuantity, component?.second)
 		}
 		
 		private fun disableChips(
@@ -133,11 +146,11 @@ class RentalItemQuantitySelectionAdapter(
 		}
 		
 		private fun setupChipListener(
-			chip: Chip, value: Int, component: Pair<String, Int>?, quantity: Int?
+			chip: Chip, value: Int, component: Pair<String, Int>?, obj: RentalObject?
 		) {
 			chip.setOnClickListener {
-				if (component != null && quantity != null) {
-					changeQuantity(component, quantity.plus(value), adapterPosition)
+				if (component != null && obj != null) {
+					changeQuantity(obj, component, component.second.plus(value), adapterPosition)
 				}
 			}
 		}

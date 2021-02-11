@@ -2,6 +2,7 @@ package de.asta.hochschule.trier.verleih.rental.view
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -56,15 +57,24 @@ class NewRentalActivity : FragmentActivity() {
 		}
 		
 		binding.pagerNextButton.setOnClickListener {
+			/*
 			if (binding.newRentalPager.currentItem == PAGE_OVERVIEW) {
 				Log.d(TAG, "save")
 			} else {
 				binding.newRentalPager.currentItem = binding.newRentalPager.currentItem + 1
 			}
 			
+			 */
+			
 			// TODO Uncomment after testing!
-			/*
-			if (!isValidInput(binding.newRentalPager.currentItem, viewModel.rentalLiveData.value, viewModel.objectsLiveData.value)) {
+			
+			if (!isValidInput(
+					binding.newRentalPager.currentItem,
+					viewModel.rentalLiveData.value,
+					viewModel.objectsLiveData.value,
+					viewModel.rentalObjectsLiveData.value
+				)
+			) {
 				Toast.makeText(this, "Input invalid", Toast.LENGTH_SHORT).show()
 			} else {
 				if (binding.newRentalPager.currentItem == PAGE_OVERVIEW) {
@@ -73,14 +83,15 @@ class NewRentalActivity : FragmentActivity() {
 					binding.newRentalPager.currentItem = binding.newRentalPager.currentItem + 1
 				}
 			}
-			*/
+			
 		}
 		
 		viewModel.rentalLiveData.observe(this, { rental ->
 			if (isValidInput(
 					binding.newRentalPager.currentItem,
 					rental,
-					viewModel.objectsLiveData.value
+					viewModel.objectsLiveData.value,
+					viewModel.rentalObjectsLiveData.value
 				)
 			) {
 				Log.d(TAG, "Valid input")
@@ -90,7 +101,19 @@ class NewRentalActivity : FragmentActivity() {
 			if (isValidInput(
 					binding.newRentalPager.currentItem,
 					viewModel.rentalLiveData.value,
-					objects
+					objects,
+					viewModel.rentalObjectsLiveData.value
+				)
+			) {
+				Log.d(TAG, "Valid input")
+			}
+		})
+		viewModel.rentalObjectsLiveData.observe(this, { rentalObjects ->
+			if (isValidInput(
+					binding.newRentalPager.currentItem,
+					viewModel.rentalLiveData.value,
+					viewModel.objectsLiveData.value,
+					rentalObjects
 				)
 			) {
 				Log.d(TAG, "Valid input")
@@ -110,7 +133,8 @@ class NewRentalActivity : FragmentActivity() {
 	private fun isValidInput(
 		page: Int,
 		rental: Rental?,
-		objects: ArrayList<RentalObject>?
+		objects: ArrayList<RentalObject>?,
+		rentalObjects: MutableMap<String, MutableMap<String, Int>>?
 	): Boolean {
 		when (page) {
 			PAGE_DATE_TIME -> {
@@ -126,7 +150,16 @@ class NewRentalActivity : FragmentActivity() {
 				return true
 			}
 			PAGE_ITEMS_QUANTITY -> {
-				if (rental?.objects == null || rental.objects?.size != objects?.size) {
+				var validItems = 0
+				rentalObjects?.forEach { obj ->
+					for (comp in obj.value) {
+						if (comp.value > 0) {
+							++validItems
+							break
+						}
+					}
+				}
+				if (validItems != rentalObjects?.size) {
 					return false
 				}
 				return true

@@ -32,39 +32,46 @@ class NewRentalItemsQuantityFragment : Fragment(R.layout.fragment_new_rental_ite
 		
 		binding.itemsRecyclerview.layoutManager = LinearLayoutManager(context)
 		adapter =
-			RentalItemQuantityAdapter(viewModel.objectsLiveData.value, { rentalObject, position ->
-				// remove object from recyclerview only
-				adapter?.removeObject(rentalObject, position)
-				
-				// undo snackbar
-				val snackbar = Snackbar.make(
-					binding.root,
-					"${rentalObject?.name} ${getString(R.string.deleted)}",
-					Snackbar.LENGTH_LONG
-				)
-				snackbar.setAction(R.string.undo) {
-					// re-add object to recyclerview
-					adapter?.addObject(rentalObject, position)
-				}
-				snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-					override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-						if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-							// now remove object permanently from viewmodel
-							if (rentalObject != null) {
-								viewModel.removeRentalObject(rentalObject)
-							}
-						}
-						super.onDismissed(transientBottomBar, event)
+			RentalItemQuantityAdapter(
+				viewModel.objectsLiveData.value,
+				viewModel.rentalObjectsLiveData.value,
+				{ obj, objComponents, position ->
+					// remove object from recyclerview only
+					adapter?.removeObject(obj, position)
+					
+					// undo SnackBar
+					val snackBar = Snackbar.make(
+						binding.root,
+						"${obj?.name} ${getString(R.string.deleted)}",
+						Snackbar.LENGTH_LONG
+					)
+					snackBar.setAction(R.string.undo) {
+						// re-add object to recyclerview
+						adapter?.addObject(obj, position)
 					}
+					snackBar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+						override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+							if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+								// now remove object permanently from viewmodel
+								if (obj != null) {
+									viewModel.removeRentalObject(obj)
+								}
+							}
+							super.onDismissed(transientBottomBar, event)
+						}
+					})
+					snackBar.show()
+				},
+				{ o, component, quantity, position ->
+					viewModel.updateQuantity(o, component, quantity)
 				})
-				snackbar.show()
-			}, { rentalObject, component, quantity ->
-				rentalObject?.let { viewModel.updateQuantity(it, component, quantity) }
-			})
 		binding.itemsRecyclerview.adapter = adapter
 		
 		viewModel.objectsLiveData.observe(requireActivity(), { objects ->
-			adapter = adapter?.resetObjects(objects)
+			adapter = adapter?.resetData(objects, viewModel.rentalObjectsLiveData.value)
+		})
+		viewModel.rentalObjectsLiveData.observe(requireActivity(), { rentalObjects ->
+			adapter = adapter?.resetData(viewModel.objectsLiveData.value, rentalObjects)
 		})
 	}
 	
