@@ -7,6 +7,7 @@ class Rental() {
 	var eventname: String? = null
 	var status: String? = null
 	var objects: MutableMap<String, MutableMap<String, Int>?>? = null
+	var notes: MutableMap<String, String>? = null
 	
 	constructor(
 		timestamp: String?,
@@ -14,7 +15,8 @@ class Rental() {
 		returndate: String?,
 		eventname: String?,
 		status: String?,
-		objects: MutableMap<String, MutableMap<String, Int>?>?
+		objects: MutableMap<String, MutableMap<String, Int>?>?,
+		notes: MutableMap<String, String>?
 	) : this() {
 		this.timestamp = timestamp
 		this.pickupdate = pickupdate
@@ -22,6 +24,7 @@ class Rental() {
 		this.eventname = eventname
 		this.status = status
 		this.objects = objects
+		this.notes = notes
 	}
 	
 }

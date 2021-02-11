@@ -35,19 +35,11 @@ class NewRentalActivity : FragmentActivity() {
 		binding.newRentalPager.isUserInputEnabled = false
 		binding.newRentalPager.registerOnPageChangeCallback(object :
 			ViewPager2.OnPageChangeCallback() {
-			
-			override fun onPageScrollStateChanged(state: Int) {}
-			
-			override fun onPageScrolled(
-				position: Int,
-				positionOffset: Float,
-				positionOffsetPixels: Int
-			) {
-			}
-			
 			override fun onPageSelected(position: Int) {
 				if (position == PAGE_OVERVIEW) {
 					binding.pagerNextButton.setImageResource(R.drawable.ic_check)
+				} else {
+					binding.pagerNextButton.setImageResource(R.drawable.ic_chevron_right)
 				}
 			}
 		})
@@ -57,17 +49,6 @@ class NewRentalActivity : FragmentActivity() {
 		}
 		
 		binding.pagerNextButton.setOnClickListener {
-			/*
-			if (binding.newRentalPager.currentItem == PAGE_OVERVIEW) {
-				Log.d(TAG, "save")
-			} else {
-				binding.newRentalPager.currentItem = binding.newRentalPager.currentItem + 1
-			}
-			
-			 */
-			
-			// TODO Uncomment after testing!
-			
 			if (!isValidInput(
 					binding.newRentalPager.currentItem,
 					viewModel.rentalLiveData.value,

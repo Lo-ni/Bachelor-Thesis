@@ -18,6 +18,8 @@ class NewRentalViewModel : ViewModel() {
 	private val mutableRentalObjects =
 		MutableLiveData<MutableMap<String, MutableMap<String, Int>>>()
 	val rentalObjectsLiveData: LiveData<MutableMap<String, MutableMap<String, Int>>> get() = mutableRentalObjects
+	private val mutableNote = MutableLiveData<String>()
+	val noteLiveData: LiveData<String> get() = mutableNote
 	
 	fun updateQuantity(rentalObject: RentalObject, component: Pair<String, Int>, quantity: Int) {
 		val rentalObjects = getRentalObjects()
@@ -70,6 +72,10 @@ class NewRentalViewModel : ViewModel() {
 		rentalObjects?.remove(rentalObject.picture_name)
 		mutableRentalObjects.value = rentalObjects
 		Log.d(TAG, "rental objects ${Gson().toJson(mutableRentalObjects.value)}")
+	}
+	
+	fun enterEventNote(text: String) {
+		mutableNote.value = text
 	}
 	
 	fun enterEventTitle(text: String) {

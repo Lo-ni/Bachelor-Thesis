@@ -2,6 +2,7 @@ package de.asta.hochschule.trier.verleih.rental.view
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.asta.hochschule.trier.verleih.R
@@ -39,6 +40,10 @@ class NewRentalOverviewFragment(private val parentActivity: NewRentalActivity) :
 		}
 		binding.editItemsButton.setOnClickListener {
 			parentActivity.goToPage(NewRentalActivity.PAGE_ITEMS_QUANTITY)
+		}
+		
+		binding.noteTextInputEditText.doAfterTextChanged {
+			viewModel.enterEventNote(it.toString())
 		}
 		
 		binding.itemsRecyclerview.layoutManager = LinearLayoutManager(context)

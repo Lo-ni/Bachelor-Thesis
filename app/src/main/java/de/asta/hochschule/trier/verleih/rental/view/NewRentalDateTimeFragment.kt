@@ -1,7 +1,6 @@
 package de.asta.hochschule.trier.verleih.rental.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.*
@@ -42,7 +41,6 @@ class NewRentalDateTimeFragment : Fragment(R.layout.fragment_new_rental_date_tim
 		setupDateTimeFields()
 		
 		binding.eventTitleEditText.doAfterTextChanged {
-			Log.d(TAG, it.toString())
 			viewModel.enterEventTitle(it.toString())
 		}
 		
