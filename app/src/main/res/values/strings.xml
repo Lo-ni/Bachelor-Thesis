@@ -33,4 +33,5 @@
     <string name="rental_return_time_select">Rückgabezeit auswählen</string>
     <string name="deleted">gelöscht</string>
     <string name="undo">Rückgängig</string>
+    <string name="quantity">Anzahl</string>
 </resources>

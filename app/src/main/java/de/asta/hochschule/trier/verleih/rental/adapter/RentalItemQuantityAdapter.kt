@@ -1,7 +1,8 @@
 package de.asta.hochschule.trier.verleih.rental.adapter
 
+import android.util.Log
 import android.view.*
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.google.firebase.storage.FirebaseStorage
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.RowItemQuantityOverviewBinding
@@ -67,6 +68,31 @@ class RentalItemQuantityAdapter(
 			itemBinding.itemDeleteButton.setOnClickListener {
 				removeItem.invoke(rentalObject, adapterPosition)
 			}
+			
+			var components: MutableMap<String, Int>? = mutableMapOf()
+			if (rentalObject?.components == null) {
+				rentalObject?.quantity?.let {
+					components?.put(itemView.context.getString(R.string.quantity), it)
+				}
+			} else {
+				components = rentalObject.components
+			}
+			val selectedQuantities = ArrayList<Int>()
+			components?.forEach { _ -> selectedQuantities.add(0) }
+			
+			itemBinding.itemQuantityRecyclerView.layoutManager =
+				LinearLayoutManager(itemView.context)
+			itemBinding.itemQuantityRecyclerView.adapter = RentalItemQuantitySelectionAdapter(
+				components,
+				selectedQuantities
+			) { quantity, position ->
+				// TODO placeholder - change quantity
+				Log.d(TAG, "change quantity $quantity at $position")
+			}
 		}
+	}
+	
+	companion object {
+		private const val TAG = "RentalItemQuantityAdapter"
 	}
 }
