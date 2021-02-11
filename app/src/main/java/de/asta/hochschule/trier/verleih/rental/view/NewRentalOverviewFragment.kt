@@ -2,13 +2,23 @@ package de.asta.hochschule.trier.verleih.rental.view
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.*
+import androidx.recyclerview.widget.LinearLayoutManager
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.FragmentNewRentalOverviewBinding
+import de.asta.hochschule.trier.verleih.helper.DateHelper
+import de.asta.hochschule.trier.verleih.rental.adapter.RentalItemOverviewAdapter
+import de.asta.hochschule.trier.verleih.rental.model.Rental
+import de.asta.hochschule.trier.verleih.rental.viewmodel.NewRentalViewModel
 
-class NewRentalOverviewFragment : Fragment(R.layout.fragment_new_rental_overview) {
+class NewRentalOverviewFragment(private val parentActivity: NewRentalActivity) :
+	Fragment(R.layout.fragment_new_rental_overview) {
 	
 	private lateinit var binding: FragmentNewRentalOverviewBinding
+	
+	private val viewModel: NewRentalViewModel by activityViewModels()
+	
+	private var adapter: RentalItemOverviewAdapter? = null
 	
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -21,6 +31,44 @@ class NewRentalOverviewFragment : Fragment(R.layout.fragment_new_rental_overview
 	
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		
+		updateTextViews(viewModel.rentalLiveData.value)
+		
+		binding.editInformationButton.setOnClickListener {
+			parentActivity.goToPage(NewRentalActivity.PAGE_DATE_TIME)
+		}
+		binding.editItemsButton.setOnClickListener {
+			parentActivity.goToPage(NewRentalActivity.PAGE_ITEMS_QUANTITY)
+		}
+		
+		binding.itemsRecyclerview.layoutManager = LinearLayoutManager(context)
+		adapter = RentalItemOverviewAdapter(
+			viewModel.objectsLiveData.value,
+			viewModel.rentalObjectsLiveData.value
+		)
+		binding.itemsRecyclerview.adapter = adapter
+		
+		viewModel.objectsLiveData.observe(requireActivity(), { objects ->
+			adapter = adapter?.resetData(objects, viewModel.rentalObjectsLiveData.value)
+		})
+		viewModel.rentalObjectsLiveData.observe(requireActivity(), { rentalObjects ->
+			adapter = adapter?.resetData(viewModel.objectsLiveData.value, rentalObjects)
+		})
+		viewModel.rentalLiveData.observe(requireActivity(), { rental ->
+			updateTextViews(rental)
+		})
+	}
+	
+	private fun updateTextViews(rental: Rental?) {
+		binding.eventTitleText.text = rental?.eventname
+		binding.eventPickupText.text =
+			rental?.pickupdate?.let {
+				DateHelper.getDateTime(it).toString(DateHelper.LONG_DATE_TIME_FORMAT)
+			}
+		binding.eventReturnText.text =
+			rental?.returndate?.let {
+				DateHelper.getDateTime(it).toString(DateHelper.LONG_DATE_TIME_FORMAT)
+			}
 	}
 	
 	companion object {

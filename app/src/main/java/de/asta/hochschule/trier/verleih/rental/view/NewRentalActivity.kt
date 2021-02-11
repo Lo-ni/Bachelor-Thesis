@@ -130,6 +130,12 @@ class NewRentalActivity : FragmentActivity() {
 		}
 	}
 	
+	fun goToPage(page: Int) {
+		if (page in PAGE_DATE_TIME..PAGE_OVERVIEW) {
+			binding.newRentalPager.currentItem = page
+		}
+	}
+	
 	private fun isValidInput(
 		page: Int,
 		rental: Rental?,
@@ -172,10 +178,10 @@ class NewRentalActivity : FragmentActivity() {
 		private const val TAG = "NewRentalActivity"
 		const val NUM_PAGES = 4
 		
-		private const val PAGE_DATE_TIME = 0
-		private const val PAGE_ITEMS_CHOICE = 1
-		private const val PAGE_ITEMS_QUANTITY = 2
-		private const val PAGE_OVERVIEW = 3
+		const val PAGE_DATE_TIME = 0
+		const val PAGE_ITEMS_CHOICE = 1
+		const val PAGE_ITEMS_QUANTITY = 2
+		const val PAGE_OVERVIEW = 3
 	}
 	
 }

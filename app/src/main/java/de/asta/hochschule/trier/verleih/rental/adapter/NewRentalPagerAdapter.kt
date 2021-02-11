@@ -1,11 +1,12 @@
 package de.asta.hochschule.trier.verleih.rental.adapter
 
-import androidx.fragment.app.*
+import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import de.asta.hochschule.trier.verleih.app.TestFragment
 import de.asta.hochschule.trier.verleih.rental.view.*
 
-class NewRentalPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+class NewRentalPagerAdapter(private val activity: NewRentalActivity) :
+	FragmentStateAdapter(activity) {
 	override fun getItemCount(): Int {
 		return NewRentalActivity.NUM_PAGES
 	}
@@ -15,7 +16,7 @@ class NewRentalPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(a
 			0 -> NewRentalDateTimeFragment()
 			1 -> NewRentalItemsChoiceFragment()
 			2 -> NewRentalItemsQuantityFragment()
-			3 -> NewRentalOverviewFragment()
+			3 -> NewRentalOverviewFragment(activity)
 			else -> TestFragment()
 		}
 	}
