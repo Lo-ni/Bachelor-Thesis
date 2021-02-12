@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.*
@@ -125,13 +124,6 @@ class RentalMainFragment : Fragment(R.layout.fragment_rental_main) {
 		} else {
 			icon.setImageResource(R.drawable.ic_chevron_down)
 		}
-		
-		if (emptyStateTextView.id == binding.noRecentRentalsText.id) {
-			val params =
-				binding.pastRentalsHeaderLayout.layoutParams as ConstraintLayout.LayoutParams
-			params.topToBottom = binding.noRecentRentalsText.id
-			binding.pastRentalsHeaderLayout.requestLayout()
-		}
 	}
 	
 	private fun toggleExpandCollapseState(
@@ -156,19 +148,6 @@ class RentalMainFragment : Fragment(R.layout.fragment_rental_main) {
 			View.VISIBLE
 		} else {
 			View.GONE
-		}
-		
-		if (recyclerView.id == binding.recentRentalsRecyclerView.id) {
-			val params =
-				binding.pastRentalsHeaderLayout.layoutParams as ConstraintLayout.LayoutParams
-			params.topToBottom = if (isExpanded && showEmptyState) {
-				binding.noRecentRentalsText.id
-			} else if (isExpanded && !showEmptyState) {
-				binding.recentRentalsRecyclerView.id
-			} else {
-				binding.recentRentalsHeaderLayout.id
-			}
-			binding.pastRentalsHeaderLayout.requestLayout()
 		}
 	}
 	

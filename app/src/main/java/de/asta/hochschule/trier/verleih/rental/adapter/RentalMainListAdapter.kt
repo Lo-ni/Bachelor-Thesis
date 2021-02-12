@@ -1,5 +1,6 @@
 package de.asta.hochschule.trier.verleih.rental.adapter
 
+import android.annotation.SuppressLint
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.database.*
@@ -37,10 +38,12 @@ class RentalMainListAdapter(
 		}
 	}
 	
+	@SuppressLint("SetTextI18n")
 	private fun setupDateTimeText(holder: ViewHolder, dateTime: DateTime) {
 		holder.itemBinding.rentalTime.text = DateHelper.getTimeString(dateTime)
 		holder.itemBinding.rentalDay.text = dateTime.dayOfMonth().asString
-		holder.itemBinding.rentalMonth.text = dateTime.monthOfYear().asShortText
+		holder.itemBinding.rentalMonth.text =
+			"${dateTime.monthOfYear().asShortText} \'${dateTime.year.toString().drop(2)}"
 	}
 	
 	override fun onDataChanged() {
