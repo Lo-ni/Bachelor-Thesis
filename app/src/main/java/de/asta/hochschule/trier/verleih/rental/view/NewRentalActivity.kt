@@ -8,6 +8,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.database.FirebaseDatabase
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.ActivityNewRentalBinding
 import de.asta.hochschule.trier.verleih.rental.adapter.NewRentalPagerAdapter
@@ -27,6 +29,20 @@ class NewRentalActivity : FragmentActivity() {
 		
 		binding.appbar.setNavigationOnClickListener {
 			onBackPressed()
+		}
+		
+		val rentalExtra = Gson().fromJson(
+			intent.getStringExtra(EditRentalActivity.INTENT_EXTRA_RENTAL),
+			Rental::class.java
+		)
+		val rentalObjectType = object : TypeToken<ArrayList<RentalObject>>() {}.type
+		val rentalObjectsExtra = Gson().fromJson<ArrayList<RentalObject>>(
+			intent.getStringExtra(EditRentalActivity.INTENT_EXTRA_RENTAL_OBJECTS),
+			rentalObjectType
+		)
+		if (rentalExtra != null && rentalObjectsExtra != null) {
+			viewModel.setupViewModel(rentalExtra, rentalObjectsExtra)
+			binding.appbar.setTitle(R.string.edit_rental)
 		}
 		
 		val pagerAdapter = NewRentalPagerAdapter(this)
@@ -69,7 +85,6 @@ class NewRentalActivity : FragmentActivity() {
 					binding.newRentalPager.currentItem = binding.newRentalPager.currentItem + 1
 				}
 			}
-			
 		}
 		
 		viewModel.rentalLiveData.observe(this, { rental ->

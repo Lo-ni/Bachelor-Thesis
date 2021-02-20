@@ -37,4 +37,6 @@
     <string name="booking">Verleihanfrage</string>
     <string name="notes">Notizen</string>
     <string name="add_note">Notiz hinzufügen</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="edit_rental">Reservierung bearbeiten</string>
 </resources>

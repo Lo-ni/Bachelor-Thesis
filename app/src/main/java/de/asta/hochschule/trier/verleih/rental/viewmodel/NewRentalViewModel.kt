@@ -138,6 +138,12 @@ class NewRentalViewModel : ViewModel() {
 		}
 	}
 	
+	fun setupViewModel(rental: Rental, rentalObjects: ArrayList<RentalObject>) {
+		mutableRental.value = rental
+		mutableRentalObjects.value = rental.objects
+		mutableObjects.value = rentalObjects
+	}
+	
 	companion object {
 		private const val TAG = "NewRentalViewModel"
 	}

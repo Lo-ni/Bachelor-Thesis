@@ -39,8 +39,13 @@ class RentalItemChoiceAdapter(
 			.placeholder(R.drawable.placeholder)
 			.into(holder.itemBinding.itemImageView)
 		
-		holder.isSelected = selectedItems?.contains(model) == true
-		var colorResId = if (selectedItems?.contains(model) == true) {
+		selectedItems?.forEach {
+			if (it.picture_name == model.picture_name) {
+				holder.isSelected = true
+				return@forEach
+			}
+		}
+		var colorResId = if (holder.isSelected) {
 			R.color.colorSecondaryLight
 		} else {
 			R.color.surface

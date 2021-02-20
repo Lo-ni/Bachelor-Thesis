@@ -5,6 +5,7 @@ import android.view.*
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.*
 import com.google.android.material.datepicker.*
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.*
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.FragmentNewRentalDateTimeBinding
@@ -68,6 +69,18 @@ class NewRentalDateTimeFragment : Fragment(R.layout.fragment_new_rental_date_tim
 		pickupTime = viewModel.rentalLiveData.value?.pickupdate?.let { DateHelper.getDateTime(it) }
 		returnDate = viewModel.rentalLiveData.value?.returndate?.let { DateHelper.getDateTime(it) }
 		returnTime = viewModel.rentalLiveData.value?.returndate?.let { DateHelper.getDateTime(it) }
+		
+		setText(binding.eventTitleEditText, viewModel.rentalLiveData.value?.eventname)
+		setText(binding.pickupDateEditText, pickupDate?.toString(DateHelper.DATE_FORMAT))
+		setText(binding.returnDateEditText, returnDate?.toString(DateHelper.DATE_FORMAT))
+		setText(binding.pickupTimeEditText, pickupTime?.toString(DateHelper.TIME_FORMAT))
+		setText(binding.returnTimeEditText, returnTime?.toString(DateHelper.TIME_FORMAT))
+	}
+	
+	private fun setText(view: TextInputEditText, text: String?) {
+		if (text != null) {
+			view.setText(text)
+		}
 	}
 	
 	private fun setupDatePicker(): MaterialDatePicker<androidx.core.util.Pair<Long, Long>> {
