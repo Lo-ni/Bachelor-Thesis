@@ -2,6 +2,7 @@ package de.asta.hochschule.trier.verleih.helper
 
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 object DateHelper {
@@ -24,5 +25,11 @@ object DateHelper {
 		} else {
 			"${dateTime.hourOfDay().asString}:${dateTime.minuteOfHour().asText}"
 		}
+	}
+	
+	fun timeStampToString(timeStamp: Long, format: String): String {
+		val date = Date(timeStamp)
+		val formatter = SimpleDateFormat(format, Locale.getDefault())
+		return formatter.format(date)
 	}
 }

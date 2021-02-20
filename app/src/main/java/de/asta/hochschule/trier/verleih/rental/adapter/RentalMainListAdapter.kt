@@ -1,16 +1,21 @@
 package de.asta.hochschule.trier.verleih.rental.adapter
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.database.*
+import com.google.gson.Gson
 import de.asta.hochschule.trier.verleih.databinding.RowRentalListBinding
 import de.asta.hochschule.trier.verleih.helper.DateHelper
 import de.asta.hochschule.trier.verleih.rental.model.Rental
+import de.asta.hochschule.trier.verleih.rental.view.EditRentalActivity
 import org.joda.time.DateTime
 import java.util.*
 
 class RentalMainListAdapter(
+	private val context: Activity,
 	private val options: FirebaseRecyclerOptions<Rental>,
 	private val showEmptyState: (Boolean) -> Unit
 ) : FirebaseRecyclerAdapter<
@@ -35,6 +40,12 @@ class RentalMainListAdapter(
 			setupDateTimeText(holder, pickupDateTime)
 		} else {
 			returnDateTime?.let { setupDateTimeText(holder, it) }
+		}
+		
+		holder.itemView.setOnClickListener {
+			val intent = Intent(context, EditRentalActivity::class.java)
+			intent.putExtra(EditRentalActivity.INTENT_EXTRA_RENTAL, Gson().toJson(model))
+			context.startActivity(intent)
 		}
 	}
 	

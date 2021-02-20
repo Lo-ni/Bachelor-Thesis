@@ -28,6 +28,9 @@
         <activity
             android:name=".rental.view.NewRentalActivity"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".rental.view.EditRentalActivity"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

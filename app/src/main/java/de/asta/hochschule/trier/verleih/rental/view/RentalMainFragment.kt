@@ -56,15 +56,16 @@ class RentalMainFragment : Fragment(R.layout.fragment_rental_main) {
 		val optionsRecent =
 			FirebaseRecyclerOptions.Builder<Rental>().setQuery(queryRecent, Rental::class.java)
 				.build()
-		recentRentalsAdapter = RentalMainListAdapter(optionsRecent) { showEmptyState ->
-			recentRentalsIsEmpty = showEmptyState
-			toggleEmptyState(
-				recentRentalsIsEmpty,
-				binding.noRecentRentalsText,
-				recentRentalsIsExpanded,
-				binding.recentRentalsHeaderIcon
-			)
-		}
+		recentRentalsAdapter =
+			RentalMainListAdapter(requireActivity(), optionsRecent) { showEmptyState ->
+				recentRentalsIsEmpty = showEmptyState
+				toggleEmptyState(
+					recentRentalsIsEmpty,
+					binding.noRecentRentalsText,
+					recentRentalsIsExpanded,
+					binding.recentRentalsHeaderIcon
+				)
+			}
 		binding.recentRentalsRecyclerView.layoutManager = LinearLayoutManager(this.context)
 		binding.recentRentalsRecyclerView.adapter = recentRentalsAdapter
 		
@@ -74,15 +75,16 @@ class RentalMainFragment : Fragment(R.layout.fragment_rental_main) {
 		val optionsPast =
 			FirebaseRecyclerOptions.Builder<Rental>().setQuery(queryPast, Rental::class.java)
 				.build()
-		pastRentalsAdapter = RentalMainListAdapter(optionsPast) { showEmptyState ->
-			pastRentalsIsEmpty = showEmptyState
-			toggleEmptyState(
-				pastRentalsIsEmpty,
-				binding.noPastRentalsText,
-				pastRentalsIsExpanded,
-				binding.pastRentalsHeaderIcon
-			)
-		}
+		pastRentalsAdapter =
+			RentalMainListAdapter(requireActivity(), optionsPast) { showEmptyState ->
+				pastRentalsIsEmpty = showEmptyState
+				toggleEmptyState(
+					pastRentalsIsEmpty,
+					binding.noPastRentalsText,
+					pastRentalsIsExpanded,
+					binding.pastRentalsHeaderIcon
+				)
+			}
 		binding.pastRentalsRecyclerView.layoutManager = LinearLayoutManager(this.context)
 		binding.pastRentalsRecyclerView.adapter = pastRentalsAdapter
 		

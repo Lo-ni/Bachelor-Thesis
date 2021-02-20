@@ -89,6 +89,30 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/status_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="Abgeschlossen"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/event_title_description"
+                        app:layout_constraintTop_toBottomOf="@id/event_title_text" />
+
+                    <TextView
+                        android:id="@+id/status_description"
+                        style="@style/Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Status:"
+                        android:textColor="@color/colorSecondaryLight"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@id/status_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/status_text" />
+
+                    <TextView
                         android:id="@+id/event_pickup_description"
                         style="@style/Caption"
                         android:layout_width="wrap_content"
@@ -108,7 +132,7 @@
                         android:text="Mi. 12.05.2021 um 12:45 Uhr"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/event_title_description"
-                        app:layout_constraintTop_toBottomOf="@id/event_title_text" />
+                        app:layout_constraintTop_toBottomOf="@id/status_text" />
 
                     <TextView
                         android:id="@+id/event_return_description"
@@ -214,16 +238,34 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/note_description"
-                    style="@style/Caption"
+                <LinearLayout
+                    android:id="@+id/notes_content_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Du hast noch Anmerkungen zu deiner Reservierung? Dann ist hier der richtige Platz dafür."
-                    app:layout_constraintTop_toBottomOf="@id/note_title_text" />
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/note_title_text">
+
+                    <TextView
+                        android:id="@+id/note_description"
+                        style="@style/Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Du hast noch Anmerkungen zu deiner Reservierung? Dann ist hier der richtige Platz dafür."
+                        app:layout_constraintTop_toBottomOf="@id/note_title_text" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/notes_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/note_title_text" />
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/note_text_input_layout"
@@ -237,7 +279,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/note_description">
+                    app:layout_constraintTop_toBottomOf="@id/notes_content_layout">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/note_text_input_edit_text"
