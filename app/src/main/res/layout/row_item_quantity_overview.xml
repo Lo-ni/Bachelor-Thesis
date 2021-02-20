@@ -25,7 +25,6 @@
             android:layout_marginEnd="8dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_delete"
-            android:tint="@color/error"
             app:layout_constraintBottom_toBottomOf="@id/item_circle_image_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/item_circle_image_view" />

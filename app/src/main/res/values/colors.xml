@@ -9,6 +9,7 @@
     <color name="background">#ffffff</color>
     <color name="surface">#ffffff</color>
     <color name="error">#97070c</color>
+    <color name="errorNight">#f74b51</color>
     <color name="disabled">#757575</color>
 
     <color name="onPrimary">#000000</color>

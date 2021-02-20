@@ -46,7 +46,7 @@ class RentalItemChoiceAdapter(
 			}
 		}
 		var colorResId = if (holder.isSelected) {
-			R.color.colorSecondaryLight
+			R.color.colorPrimary
 		} else {
 			R.color.surface
 		}

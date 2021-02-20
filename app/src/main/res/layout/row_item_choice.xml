@@ -47,6 +47,7 @@
                 android:gravity="center_vertical|start"
                 android:maxLines="1"
                 android:text="Gegenstand"
+                android:textColor="@color/colorSecondary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/item_information_button"
                 app:layout_constraintStart_toStartOf="parent"
@@ -60,6 +61,7 @@
                 android:padding="4dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_info"
+                android:tint="@color/colorSecondary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 

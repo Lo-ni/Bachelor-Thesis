@@ -73,7 +73,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Veranstaltung:"
-                        android:textColor="@color/colorSecondaryLight"
                         app:layout_constraintBottom_toBottomOf="@id/event_title_text"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/event_title_text" />
@@ -106,7 +105,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Status:"
-                        android:textColor="@color/colorSecondaryLight"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@id/status_text"
                         app:layout_constraintStart_toStartOf="parent"
@@ -118,7 +116,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Abholung:"
-                        android:textColor="@color/colorSecondaryLight"
                         app:layout_constraintBottom_toBottomOf="@id/event_pickup_text"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/event_pickup_text" />
@@ -140,7 +137,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Rückgabe:"
-                        android:textColor="@color/colorSecondaryLight"
                         app:layout_constraintBottom_toBottomOf="@id/event_return_text"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@id/event_return_text" />
