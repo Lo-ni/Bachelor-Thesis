@@ -45,7 +45,7 @@ class RentalMainListAdapter(
 		holder.itemView.setOnClickListener {
 			val intent = Intent(context, EditRentalActivity::class.java)
 			intent.putExtra(EditRentalActivity.INTENT_EXTRA_RENTAL, Gson().toJson(model))
-			context.startActivity(intent)
+			context.startActivityForResult(intent, EditRentalActivity.DELETE_RENTAL_REQUEST_CODE)
 		}
 	}
 	

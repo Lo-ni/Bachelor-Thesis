@@ -1,6 +1,7 @@
 package de.asta.hochschule.trier.verleih.rental.model
 
 class Rental() {
+	var id: String? = null
 	var timestamp: String? = null
 	var pickupdate: String? = null
 	var returndate: String? = null

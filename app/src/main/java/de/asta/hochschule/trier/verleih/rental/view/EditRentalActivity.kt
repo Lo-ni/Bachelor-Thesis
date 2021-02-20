@@ -6,19 +6,18 @@ import android.view.*
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.*
 import com.google.gson.Gson
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.ActivityEditRentalBinding
 import de.asta.hochschule.trier.verleih.helper.DateHelper
 import de.asta.hochschule.trier.verleih.rental.adapter.*
-import de.asta.hochschule.trier.verleih.rental.model.Rental
+import de.asta.hochschule.trier.verleih.rental.model.*
 import de.asta.hochschule.trier.verleih.rental.viewmodel.EditRentalViewModel
 
 class EditRentalActivity : FragmentActivity() {
 	
 	private lateinit var binding: ActivityEditRentalBinding
-	
-	private var rental: Rental? = null
 	
 	private val viewModel: EditRentalViewModel by viewModels()
 	
@@ -27,7 +26,7 @@ class EditRentalActivity : FragmentActivity() {
 		binding = ActivityEditRentalBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 		
-		rental = Gson().fromJson(intent.getStringExtra(INTENT_EXTRA_RENTAL), Rental::class.java)
+		val rental = Gson().fromJson(intent.getStringExtra(INTENT_EXTRA_RENTAL), Rental::class.java)
 		
 		binding.appbar.setNavigationOnClickListener {
 			onBackPressed()
@@ -61,15 +60,11 @@ class EditRentalActivity : FragmentActivity() {
 				binding.appbar.setOnMenuItemClickListener { item ->
 					when (item.itemId) {
 						R.id.appbar_edit -> {
-							val intent = Intent(this, NewRentalActivity::class.java)
-							intent.putExtra(INTENT_EXTRA_RENTAL, Gson().toJson(rental))
-							intent.putExtra(INTENT_EXTRA_RENTAL_OBJECTS, Gson().toJson(it))
-							this.startActivityForResult(intent, EDIT_RENTAL_REQUEST_CODE)
+							editRental(rental, it)
 							return@setOnMenuItemClickListener true
 						}
 						R.id.appbar_delete -> {
-							// TODO
-							finish()
+							deleteRental(rental)
 							return@setOnMenuItemClickListener true
 						}
 						else -> return@setOnMenuItemClickListener false
@@ -87,13 +82,28 @@ class EditRentalActivity : FragmentActivity() {
 		
 		binding.rentalContainer.editItemsButton.visibility = View.INVISIBLE
 		binding.rentalContainer.editInformationButton.visibility = View.INVISIBLE
-		
+	}
+	
+	private fun editRental(rental: Rental, rentalObjects: ArrayList<RentalObject>) {
+		val intent = Intent(this, NewRentalActivity::class.java)
+		intent.putExtra(INTENT_EXTRA_RENTAL, Gson().toJson(rental))
+		intent.putExtra(INTENT_EXTRA_RENTAL_OBJECTS, Gson().toJson(rentalObjects))
+		this.startActivityForResult(intent, EDIT_RENTAL_REQUEST_CODE)
+	}
+	
+	private fun deleteRental(rental: Rental) {
+		val i = intent
+		i.putExtra(INTENT_EXTRA_DELETE_RENTAL, Gson().toJson(rental))
+		setResult(DELETE_RENTAL_REQUEST_CODE, i)
+		finish()
 	}
 	
 	companion object {
 		const val INTENT_EXTRA_RENTAL = "Rental"
 		const val INTENT_EXTRA_RENTAL_OBJECTS = "Rental_Objects"
+		const val INTENT_EXTRA_DELETE_RENTAL = "Delete_Rental"
 		private const val TAG = "EditRentalActivity"
 		private const val EDIT_RENTAL_REQUEST_CODE = 1
+		const val DELETE_RENTAL_REQUEST_CODE = 2
 	}
 }

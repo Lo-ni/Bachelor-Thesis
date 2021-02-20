@@ -5,16 +5,14 @@ import android.os.Bundle
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.*
-import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.firebase.ui.database.*
 import com.google.firebase.database.FirebaseDatabase
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.FragmentRentalMainBinding
 import de.asta.hochschule.trier.verleih.helper.DateHelper
 import de.asta.hochschule.trier.verleih.rental.adapter.RentalMainListAdapter
 import de.asta.hochschule.trier.verleih.rental.model.Rental
-import de.asta.hochschule.trier.verleih.rental.viewmodel.RentalMainViewModel
 import org.joda.time.DateTime
 
 class RentalMainFragment : Fragment(R.layout.fragment_rental_main) {
@@ -28,10 +26,6 @@ class RentalMainFragment : Fragment(R.layout.fragment_rental_main) {
 	private var pastRentalsIsEmpty = false
 	private var recentRentalsIsExpanded = true
 	private var pastRentalsIsExpanded = true
-	
-	private val viewModel: RentalMainViewModel by lazy {
-		ViewModelProvider(this).get(RentalMainViewModel::class.java)
-	}
 	
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -50,12 +44,20 @@ class RentalMainFragment : Fragment(R.layout.fragment_rental_main) {
 			startActivity(intent)
 		}
 		
+		val parser = SnapshotParser { snapshot ->
+			val rental = snapshot.getValue(Rental::class.java)
+			if (rental != null) {
+				rental.id = snapshot.key
+				return@SnapshotParser rental
+			}
+			return@SnapshotParser Rental()
+		}
+		
 		val queryRecent =
 			FirebaseDatabase.getInstance().reference.child("rentals").orderByChild("returndate")
 				.startAt(DateTime.now().toString(DateHelper.TIMESTAMP_FORMAT))
 		val optionsRecent =
-			FirebaseRecyclerOptions.Builder<Rental>().setQuery(queryRecent, Rental::class.java)
-				.build()
+			FirebaseRecyclerOptions.Builder<Rental>().setQuery(queryRecent, parser).build()
 		recentRentalsAdapter =
 			RentalMainListAdapter(requireActivity(), optionsRecent) { showEmptyState ->
 				recentRentalsIsEmpty = showEmptyState
@@ -73,7 +75,7 @@ class RentalMainFragment : Fragment(R.layout.fragment_rental_main) {
 			FirebaseDatabase.getInstance().reference.child("rentals").orderByChild("returndate")
 				.endAt(DateTime.now().toString(DateHelper.TIMESTAMP_FORMAT))
 		val optionsPast =
-			FirebaseRecyclerOptions.Builder<Rental>().setQuery(queryPast, Rental::class.java)
+			FirebaseRecyclerOptions.Builder<Rental>().setQuery(queryPast, parser)
 				.build()
 		pastRentalsAdapter =
 			RentalMainListAdapter(requireActivity(), optionsPast) { showEmptyState ->
