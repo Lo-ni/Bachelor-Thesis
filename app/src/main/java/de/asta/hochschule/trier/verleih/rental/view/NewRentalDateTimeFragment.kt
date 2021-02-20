@@ -9,9 +9,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.*
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.FragmentNewRentalDateTimeBinding
-import de.asta.hochschule.trier.verleih.helper.DateHelper
 import de.asta.hochschule.trier.verleih.rental.viewmodel.NewRentalViewModel
-import de.asta.hochschule.trier.verleih.util.DateValidatorWeekdays
+import de.asta.hochschule.trier.verleih.util.*
 import org.joda.time.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -39,28 +38,54 @@ class NewRentalDateTimeFragment : Fragment(R.layout.fragment_new_rental_date_tim
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		
-		setupDateTimeFields()
+		setupView()
 		
+		viewModel.validPagesLiveData.observe(viewLifecycleOwner, {
+			showEditTextError(binding.eventTitleEditText)
+			showEditTextError(binding.pickupDateEditText)
+			showEditTextError(binding.pickupTimeEditText)
+			showEditTextError(binding.returnDateEditText)
+			showEditTextError(binding.returnTimeEditText)
+		})
+	}
+	
+	private fun setupView() {
 		binding.eventTitleEditText.doAfterTextChanged {
+			binding.eventTitleEditText.error = null
 			viewModel.enterEventTitle(it.toString())
 		}
 		
-		val datePicker = setupDatePicker()
-		binding.pickupDateEditText.setOnClickListener {
-			activity?.supportFragmentManager?.let { fm -> datePicker.show(fm, TAG) }
-		}
-		binding.returnDateEditText.setOnClickListener {
-			activity?.supportFragmentManager?.let { fm -> datePicker.show(fm, TAG) }
+		setupDateTimeFields()
+		setupDateTimeEditText(binding.pickupDateEditText, null, null)
+		setupDateTimeEditText(binding.returnDateEditText, null, null)
+		setupDateTimeEditText(binding.pickupTimeEditText, R.string.rental_pickup_time_select, true)
+		setupDateTimeEditText(binding.returnTimeEditText, R.string.rental_return_time_select, false)
+	}
+	
+	private fun setupDateTimeEditText(
+		editText: TextInputEditText,
+		stringResId: Int?,
+		isPickupTime: Boolean?
+	) {
+		val picker = if (stringResId != null && isPickupTime != null) {
+			setupTimePicker(stringResId, isPickupTime)
+		} else {
+			setupDatePicker()
 		}
 		
-		val timePickerPickup = setupTimePicker(R.string.rental_pickup_time_select, true)
-		binding.pickupTimeEditText.setOnClickListener {
-			activity?.supportFragmentManager?.let { fm -> timePickerPickup.show(fm, TAG) }
+		editText.setOnClickListener {
+			activity?.supportFragmentManager?.let { fm -> picker.show(fm, TAG) }
 		}
-		
-		val timePickerReturn = setupTimePicker(R.string.rental_return_time_select, false)
-		binding.returnTimeEditText.setOnClickListener {
-			activity?.supportFragmentManager?.let { fm -> timePickerReturn.show(fm, TAG) }
+		editText.doAfterTextChanged {
+			editText.error = null
+		}
+	}
+	
+	private fun showEditTextError(editText: TextInputEditText) {
+		editText.error = if (editText.text.isNullOrBlank()) {
+			context?.getString(R.string.input_required)
+		} else {
+			null
 		}
 	}
 	

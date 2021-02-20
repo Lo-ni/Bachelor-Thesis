@@ -3,10 +3,12 @@ package de.asta.hochschule.trier.verleih.rental.viewmodel
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
+import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import de.asta.hochschule.trier.verleih.R
-import de.asta.hochschule.trier.verleih.helper.DateHelper
 import de.asta.hochschule.trier.verleih.rental.model.*
+import de.asta.hochschule.trier.verleih.rental.view.NewRentalActivity
+import de.asta.hochschule.trier.verleih.util.*
 import org.joda.time.DateTime
 
 class NewRentalViewModel : ViewModel() {
@@ -19,9 +21,18 @@ class NewRentalViewModel : ViewModel() {
 		MutableLiveData<MutableMap<String, MutableMap<String, Int>?>>()
 	val rentalObjectsLiveData: LiveData<MutableMap<String, MutableMap<String, Int>?>> get() = mutableRentalObjects
 	private val mutableNote = MutableLiveData<String>()
-	val noteLiveData: LiveData<String> get() = mutableNote
 	
-	fun buildRental(): Rental? {
+	private val mutableValidPages = MutableLiveData<ArrayList<Boolean>>()
+	val validPagesLiveData: LiveData<ArrayList<Boolean>> get() = mutableValidPages
+	
+	fun saveRentalToDatabase() {
+		val rental = buildRental()
+		val firebaseRef =
+			FirebaseDatabase.getInstance().reference.child(Constants.RENTALS.childName)
+		firebaseRef.push().setValue(rental)
+	}
+	
+	private fun buildRental(): Rental? {
 		val rental = getRental()
 		val rentalObjects = getRentalObjects()
 		val note = mutableNote.value
@@ -138,10 +149,59 @@ class NewRentalViewModel : ViewModel() {
 		}
 	}
 	
+	private fun getValidPages(): ArrayList<Boolean>? {
+		return if (mutableValidPages.value != null) {
+			mutableValidPages.value
+		} else {
+			val validPages = ArrayList<Boolean>()
+			for (i in 0 until NewRentalActivity.NUM_PAGES) {
+				validPages.add(true)
+			}
+			validPages
+		}
+	}
+	
 	fun setupViewModel(rental: Rental, rentalObjects: ArrayList<RentalObject>) {
 		mutableRental.value = rental
 		mutableRentalObjects.value = rental.objects
 		mutableObjects.value = rentalObjects
+	}
+	
+	fun validateInput(currentPage: Int): Boolean {
+		val isValid = when (currentPage) {
+			NewRentalActivity.PAGE_DATE_TIME -> {
+				mutableRental.value?.eventname != null &&
+						mutableRental.value?.pickupdate != null &&
+						mutableRental.value?.returndate != null
+			}
+			NewRentalActivity.PAGE_ITEMS_CHOICE -> {
+				!(mutableObjects.value == null || mutableObjects.value?.size == 0)
+			}
+			NewRentalActivity.PAGE_ITEMS_QUANTITY -> {
+				countValidItems() == mutableRentalObjects.value?.size
+			}
+			else -> true
+		}
+		val validPages = getValidPages()
+		validPages?.set(currentPage, isValid)
+		mutableValidPages.value = validPages
+		return isValid
+	}
+	
+	private fun countValidItems(): Int {
+		var validItems = 0
+		mutableRentalObjects.value?.forEach { obj ->
+			val objValues = obj.value
+			if (objValues != null) {
+				for (component in objValues) {
+					if (component.value > 0) {
+						++validItems
+						break
+					}
+				}
+			}
+		}
+		return validItems
 	}
 	
 	companion object {

@@ -4,16 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.activity.viewModels
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.*
 import com.google.gson.Gson
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.ActivityEditRentalBinding
-import de.asta.hochschule.trier.verleih.helper.DateHelper
 import de.asta.hochschule.trier.verleih.rental.adapter.*
 import de.asta.hochschule.trier.verleih.rental.model.*
 import de.asta.hochschule.trier.verleih.rental.viewmodel.EditRentalViewModel
+import de.asta.hochschule.trier.verleih.util.DateHelper
 
 class EditRentalActivity : FragmentActivity() {
 	
@@ -21,23 +22,50 @@ class EditRentalActivity : FragmentActivity() {
 	
 	private val viewModel: EditRentalViewModel by viewModels()
 	
+	private var rental: Rental? = null
+	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		binding = ActivityEditRentalBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 		
-		val rental = Gson().fromJson(intent.getStringExtra(INTENT_EXTRA_RENTAL), Rental::class.java)
+		rental = Gson().fromJson(intent.getStringExtra(INTENT_EXTRA_RENTAL), Rental::class.java)
+		val isEditable = rental?.pickupdate?.let { DateHelper.getDateTime(it).isAfterNow }
 		
+		setupAppBar(isEditable)
+		setupRecyclerViews(isEditable)
+		setViewsVisibility()
+		setTexts()
+	}
+	
+	private fun setupRecyclerViews(showMenuItems: Boolean?) {
+		binding.rentalContainer.itemsRecyclerview.layoutManager = LinearLayoutManager(this)
+		viewModel.receiveRentalObjects(rental) { objects ->
+			binding.rentalContainer.itemsRecyclerview.adapter =
+				RentalItemOverviewAdapter(objects, rental?.objects)
+			if (showMenuItems == true) {
+				binding.appbar.setOnMenuItemClickListener(getOnMenuItemClickListener(objects))
+			}
+		}
+		
+		binding.rentalContainer.notesRecyclerView.layoutManager = LinearLayoutManager(this)
+		binding.rentalContainer.notesRecyclerView.adapter = EditRentalNotesAdapter(rental?.notes)
+	}
+	
+	private fun setupAppBar(showMenuItems: Boolean?) {
 		binding.appbar.setNavigationOnClickListener {
 			onBackPressed()
 		}
-		
-		binding.rentalContainer.overviewDescription.visibility = View.GONE
-		binding.rentalContainer.statusText.visibility = View.VISIBLE
-		binding.rentalContainer.statusDescription.visibility = View.VISIBLE
-		
+		if (showMenuItems == true) {
+			binding.appbar.inflateMenu(R.menu.appbar_edit_delete)
+		}
+	}
+	
+	private fun setTexts() {
 		binding.rentalContainer.eventTitleText.text = rental?.eventname
 		binding.rentalContainer.statusText.text = rental?.status
+		binding.rentalContainer.noteTitleText.text = getString(R.string.notes)
+		binding.rentalContainer.noteTextInputLayout.hint = getString(R.string.add_note)
 		binding.rentalContainer.eventPickupText.text =
 			rental?.pickupdate?.let {
 				DateHelper.getDateTime(it).toString(DateHelper.LONG_DATE_TIME_FORMAT)
@@ -46,42 +74,32 @@ class EditRentalActivity : FragmentActivity() {
 			rental?.returndate?.let {
 				DateHelper.getDateTime(it).toString(DateHelper.LONG_DATE_TIME_FORMAT)
 			}
-		
-		val isEditable = rental?.pickupdate?.let { DateHelper.getDateTime(it).isAfterNow }
-		if (isEditable == true) {
-			binding.appbar.inflateMenu(R.menu.appbar_edit_delete)
-		}
-		
-		binding.rentalContainer.itemsRecyclerview.layoutManager = LinearLayoutManager(this)
-		viewModel.receiveRentalObjects(rental) {
-			binding.rentalContainer.itemsRecyclerview.adapter =
-				RentalItemOverviewAdapter(it, rental?.objects)
-			if (isEditable == true) {
-				binding.appbar.setOnMenuItemClickListener { item ->
-					when (item.itemId) {
-						R.id.appbar_edit -> {
-							editRental(rental, it)
-							return@setOnMenuItemClickListener true
-						}
-						R.id.appbar_delete -> {
-							deleteRental(rental)
-							return@setOnMenuItemClickListener true
-						}
-						else -> return@setOnMenuItemClickListener false
-					}
-				}
-			}
-		}
-		
-		binding.rentalContainer.noteTitleText.text = getString(R.string.notes)
+	}
+	
+	private fun setViewsVisibility() {
+		binding.rentalContainer.overviewDescription.visibility = View.GONE
+		binding.rentalContainer.statusText.visibility = View.VISIBLE
+		binding.rentalContainer.statusDescription.visibility = View.VISIBLE
 		binding.rentalContainer.noteDescription.visibility = View.GONE
 		binding.rentalContainer.notesRecyclerView.visibility = View.VISIBLE
-		binding.rentalContainer.notesRecyclerView.layoutManager = LinearLayoutManager(this)
-		binding.rentalContainer.notesRecyclerView.adapter = EditRentalNotesAdapter(rental?.notes)
-		binding.rentalContainer.noteTextInputLayout.hint = getString(R.string.add_note)
-		
 		binding.rentalContainer.editItemsButton.visibility = View.INVISIBLE
 		binding.rentalContainer.editInformationButton.visibility = View.INVISIBLE
+	}
+	
+	private fun getOnMenuItemClickListener(rentalObjects: ArrayList<RentalObject>): Toolbar.OnMenuItemClickListener {
+		return Toolbar.OnMenuItemClickListener { item ->
+			when (item.itemId) {
+				R.id.appbar_edit -> {
+					rental?.let { editRental(it, rentalObjects) }
+					return@OnMenuItemClickListener true
+				}
+				R.id.appbar_delete -> {
+					rental?.let { deleteRental(it) }
+					return@OnMenuItemClickListener true
+				}
+				else -> return@OnMenuItemClickListener false
+			}
+		}
 	}
 	
 	private fun editRental(rental: Rental, rentalObjects: ArrayList<RentalObject>) {
@@ -102,8 +120,8 @@ class EditRentalActivity : FragmentActivity() {
 		const val INTENT_EXTRA_RENTAL = "Rental"
 		const val INTENT_EXTRA_RENTAL_OBJECTS = "Rental_Objects"
 		const val INTENT_EXTRA_DELETE_RENTAL = "Delete_Rental"
-		private const val TAG = "EditRentalActivity"
 		private const val EDIT_RENTAL_REQUEST_CODE = 1
 		const val DELETE_RENTAL_REQUEST_CODE = 2
 	}
+	
 }

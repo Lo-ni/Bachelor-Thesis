@@ -1,13 +1,10 @@
 package de.asta.hochschule.trier.verleih.rental.view
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import de.asta.hochschule.trier.verleih.R
@@ -31,95 +28,8 @@ class NewRentalActivity : FragmentActivity() {
 			onBackPressed()
 		}
 		
-		val rentalExtra = Gson().fromJson(
-			intent.getStringExtra(EditRentalActivity.INTENT_EXTRA_RENTAL),
-			Rental::class.java
-		)
-		val rentalObjectType = object : TypeToken<ArrayList<RentalObject>>() {}.type
-		val rentalObjectsExtra = Gson().fromJson<ArrayList<RentalObject>>(
-			intent.getStringExtra(EditRentalActivity.INTENT_EXTRA_RENTAL_OBJECTS),
-			rentalObjectType
-		)
-		if (rentalExtra != null && rentalObjectsExtra != null) {
-			viewModel.setupViewModel(rentalExtra, rentalObjectsExtra)
-			binding.appbar.setTitle(R.string.edit_rental)
-		}
-		
-		val pagerAdapter = NewRentalPagerAdapter(this)
-		binding.newRentalPager.adapter = pagerAdapter
-		TabLayoutMediator(binding.newRentalPagerTabs, binding.newRentalPager) { _, _ -> }.attach()
-		
-		binding.newRentalPager.isUserInputEnabled = false
-		binding.newRentalPager.registerOnPageChangeCallback(object :
-			ViewPager2.OnPageChangeCallback() {
-			override fun onPageSelected(position: Int) {
-				if (position == PAGE_OVERVIEW) {
-					binding.pagerNextButton.setImageResource(R.drawable.ic_check)
-				} else {
-					binding.pagerNextButton.setImageResource(R.drawable.ic_chevron_right)
-				}
-			}
-		})
-		
-		binding.pagerBackButton.setOnClickListener {
-			onBackPressed()
-		}
-		
-		binding.pagerNextButton.setOnClickListener {
-			if (!isValidInput(
-					binding.newRentalPager.currentItem,
-					viewModel.rentalLiveData.value,
-					viewModel.objectsLiveData.value,
-					viewModel.rentalObjectsLiveData.value
-				)
-			) {
-				Toast.makeText(this, "Input invalid", Toast.LENGTH_SHORT).show()
-			} else {
-				if (binding.newRentalPager.currentItem == PAGE_OVERVIEW) {
-					Log.d(TAG, "save")
-					val rental = viewModel.buildRental()
-					val firebaseRef = FirebaseDatabase.getInstance().reference.child("rentals")
-					firebaseRef.push().setValue(rental)
-					finish()
-				} else {
-					binding.newRentalPager.currentItem = binding.newRentalPager.currentItem + 1
-				}
-			}
-		}
-		
-		viewModel.rentalLiveData.observe(this, { rental ->
-			if (isValidInput(
-					binding.newRentalPager.currentItem,
-					rental,
-					viewModel.objectsLiveData.value,
-					viewModel.rentalObjectsLiveData.value
-				)
-			) {
-				Log.d(TAG, "Valid input")
-			}
-		})
-		viewModel.objectsLiveData.observe(this, { objects ->
-			if (isValidInput(
-					binding.newRentalPager.currentItem,
-					viewModel.rentalLiveData.value,
-					objects,
-					viewModel.rentalObjectsLiveData.value
-				)
-			) {
-				Log.d(TAG, "Valid input")
-			}
-		})
-		viewModel.rentalObjectsLiveData.observe(this, { rentalObjects ->
-			if (isValidInput(
-					binding.newRentalPager.currentItem,
-					viewModel.rentalLiveData.value,
-					viewModel.objectsLiveData.value,
-					rentalObjects
-				)
-			) {
-				Log.d(TAG, "Valid input")
-			}
-		})
+		setupEditRental()
+		setupViewPager()
 	}
 	
 	override fun onBackPressed() {
@@ -136,51 +46,53 @@ class NewRentalActivity : FragmentActivity() {
 		}
 	}
 	
-	private fun isValidInput(
-		page: Int,
-		rental: Rental?,
-		objects: ArrayList<RentalObject>?,
-		rentalObjects: MutableMap<String, MutableMap<String, Int>?>?
-	): Boolean {
-		when (page) {
-			PAGE_DATE_TIME -> {
-				if (rental?.eventname == null || rental.pickupdate == null || rental.returndate == null) {
-					return false
+	private fun setupViewPager() {
+		binding.newRentalPager.adapter = NewRentalPagerAdapter(this)
+		TabLayoutMediator(binding.newRentalPagerTabs, binding.newRentalPager) { _, _ -> }.attach()
+		binding.newRentalPager.isUserInputEnabled = false
+		binding.newRentalPager.registerOnPageChangeCallback(object :
+			ViewPager2.OnPageChangeCallback() {
+			override fun onPageSelected(position: Int) {
+				if (position == PAGE_OVERVIEW) {
+					binding.pagerNextButton.setImageResource(R.drawable.ic_check)
+				} else {
+					binding.pagerNextButton.setImageResource(R.drawable.ic_chevron_right)
 				}
-				return true
 			}
-			PAGE_ITEMS_CHOICE -> {
-				if (objects == null || objects.size == 0) {
-					return false
+		})
+		binding.pagerBackButton.setOnClickListener {
+			onBackPressed()
+		}
+		binding.pagerNextButton.setOnClickListener {
+			if (viewModel.validateInput(binding.newRentalPager.currentItem)) {
+				if (binding.newRentalPager.currentItem == PAGE_OVERVIEW) {
+					viewModel.saveRentalToDatabase()
+					finish()
+				} else {
+					binding.newRentalPager.currentItem = binding.newRentalPager.currentItem + 1
 				}
-				return true
 			}
-			PAGE_ITEMS_QUANTITY -> {
-				var validItems = 0
-				rentalObjects?.forEach { obj ->
-					val objValues = obj.value
-					if (objValues != null) {
-						for (comp in objValues) {
-							if (comp.value > 0) {
-								++validItems
-								break
-							}
-						}
-					}
-				}
-				if (validItems != rentalObjects?.size) {
-					return false
-				}
-				return true
-			}
-			else -> return true
+		}
+	}
+	
+	private fun setupEditRental() {
+		val rental = Gson().fromJson(
+			intent.getStringExtra(EditRentalActivity.INTENT_EXTRA_RENTAL),
+			Rental::class.java
+		)
+		val objectsType = object : TypeToken<ArrayList<RentalObject>>() {}.type
+		val objects = Gson().fromJson<ArrayList<RentalObject>>(
+			intent.getStringExtra(EditRentalActivity.INTENT_EXTRA_RENTAL_OBJECTS),
+			objectsType
+		)
+		if (rental != null && objects != null) {
+			viewModel.setupViewModel(rental, objects)
+			binding.appbar.setTitle(R.string.edit_rental)
 		}
 	}
 	
 	companion object {
-		private const val TAG = "NewRentalActivity"
 		const val NUM_PAGES = 4
-		
 		const val PAGE_DATE_TIME = 0
 		const val PAGE_ITEMS_CHOICE = 1
 		const val PAGE_ITEMS_QUANTITY = 2

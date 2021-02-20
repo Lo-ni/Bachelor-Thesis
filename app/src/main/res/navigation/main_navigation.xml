@@ -12,22 +12,22 @@
         tools:layout="@layout/fragment_rental_main" />
     <fragment
         android:id="@+id/nav_event_main"
-        android:name="de.asta.hochschule.trier.verleih.event.fragment.EventMainFragment"
+        android:name="de.asta.hochschule.trier.verleih.event.view.EventMainFragment"
         android:label="EventMainFragment"
         tools:layout="@layout/fragment_event_main" />
     <fragment
         android:id="@+id/nav_news_main"
-        android:name="de.asta.hochschule.trier.verleih.news.fragment.NewsMainFragment"
+        android:name="de.asta.hochschule.trier.verleih.news.view.NewsMainFragment"
         android:label="NewsMainFragment"
         tools:layout="@layout/fragment_news_main" />
     <fragment
         android:id="@+id/nav_settings_main"
-        android:name="de.asta.hochschule.trier.verleih.settings.fragment.SettingsMainFragment"
+        android:name="de.asta.hochschule.trier.verleih.settings.view.SettingsMainFragment"
         android:label="SettingsMainFragment"
         tools:layout="@layout/fragment_settings_main" />
     <fragment
         android:id="@+id/nav_admin_main"
-        android:name="de.asta.hochschule.trier.verleih.admin.fragment.AdminMainFragment"
+        android:name="de.asta.hochschule.trier.verleih.admin.view.AdminMainFragment"
         android:label="AdminMainFragment"
         tools:layout="@layout/fragment_admin_main" />
 

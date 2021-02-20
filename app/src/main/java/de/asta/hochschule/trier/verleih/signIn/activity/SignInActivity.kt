@@ -8,7 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import de.asta.hochschule.trier.verleih.app.activity.MainActivity
+import de.asta.hochschule.trier.verleih.app.view.MainActivity
 import de.asta.hochschule.trier.verleih.signIn.viewmodel.SignInViewModel
 
 class SignInActivity : AppCompatActivity() {

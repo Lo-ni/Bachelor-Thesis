@@ -1,4 +1,4 @@
-package de.asta.hochschule.trier.verleih.app.activity
+package de.asta.hochschule.trier.verleih.app.view
 
 import android.content.Intent
 import android.os.*
@@ -33,7 +33,6 @@ class SplashScreenActivity : AppCompatActivity() {
 			startActivity(intent)
 			finish()
 		}, SPLASH_TIME.toLong())
-		
 	}
 	
 	companion object {

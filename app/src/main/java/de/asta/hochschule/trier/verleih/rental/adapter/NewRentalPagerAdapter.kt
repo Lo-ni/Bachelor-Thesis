@@ -2,7 +2,7 @@ package de.asta.hochschule.trier.verleih.rental.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import de.asta.hochschule.trier.verleih.app.TestFragment
+import de.asta.hochschule.trier.verleih.app.view.TestFragment
 import de.asta.hochschule.trier.verleih.rental.view.*
 
 class NewRentalPagerAdapter(private val activity: NewRentalActivity) :

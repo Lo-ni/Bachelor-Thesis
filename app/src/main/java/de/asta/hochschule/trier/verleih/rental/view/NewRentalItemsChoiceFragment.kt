@@ -2,6 +2,7 @@ package de.asta.hochschule.trier.verleih.rental.view
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.*
 import androidx.recyclerview.widget.GridLayoutManager
 import com.firebase.ui.database.FirebaseRecyclerOptions
@@ -61,6 +62,13 @@ class NewRentalItemsChoiceFragment : Fragment(R.layout.fragment_new_rental_items
 		
 		viewModel.objectsLiveData.observe(requireActivity(), {
 			adapter = adapter.resetSelectedItems(it)
+		})
+		
+		viewModel.validPagesLiveData.observe(viewLifecycleOwner, {
+			if (!it[NewRentalActivity.PAGE_ITEMS_CHOICE]) {
+				Toast.makeText(context, R.string.rental_items_choice_error, Toast.LENGTH_SHORT)
+					.show()
+			}
 		})
 	}
 	

@@ -1,4 +1,4 @@
-package de.asta.hochschule.trier.verleih.helper
+package de.asta.hochschule.trier.verleih.util
 
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat

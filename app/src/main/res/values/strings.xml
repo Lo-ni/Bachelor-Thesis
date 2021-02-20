@@ -39,4 +39,8 @@
     <string name="add_note">Add note</string>
     <string name="edit">Edit</string>
     <string name="edit_rental">Edit Reservation</string>
+    <string name="invalid_input">Please check your input.</string>
+    <string name="input_required">Input required</string>
+    <string name="rental_items_choice_error">Please chose at least one item.</string>
+    <string name="rental_items_quantity_error">Please specify the desired quantity of each item.</string>
 </resources>

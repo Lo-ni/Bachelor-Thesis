@@ -2,6 +2,7 @@ package de.asta.hochschule.trier.verleih.rental.view
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.*
@@ -72,6 +73,12 @@ class NewRentalItemsQuantityFragment : Fragment(R.layout.fragment_new_rental_ite
 		})
 		viewModel.rentalObjectsLiveData.observe(requireActivity(), { rentalObjects ->
 			adapter = adapter?.resetData(viewModel.objectsLiveData.value, rentalObjects)
+		})
+		viewModel.validPagesLiveData.observe(viewLifecycleOwner, {
+			if (!it[NewRentalActivity.PAGE_ITEMS_QUANTITY]) {
+				Toast.makeText(context, R.string.rental_items_quantity_error, Toast.LENGTH_SHORT)
+					.show()
+			}
 		})
 	}
 	

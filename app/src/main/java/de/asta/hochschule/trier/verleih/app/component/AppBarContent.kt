@@ -13,8 +13,8 @@ class AppBarContent @JvmOverloads constructor(
 	context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 	
-	var titleTextView: MaterialTextView
-	var profileImageView: CircleImageView
+	private var titleTextView: MaterialTextView
+	private var profileImageView: CircleImageView
 	
 	init {
 		val styledAttributes = context.obtainStyledAttributes(
@@ -33,19 +33,14 @@ class AppBarContent @JvmOverloads constructor(
 		
 		profileImageView = (getChildAt(0) as ViewGroup).getChildAt(0) as CircleImageView
 		profileImageView.setImageDrawable(ContextCompat.getDrawable(context, image))
-		profileImageView.setOnClickListener { Log.d("AppBarContent", "onClick") }
+		profileImageView.setOnClickListener {
+			Log.d(TAG, "on profile image click")
+			// TODO: show user profile
+		}
 	}
 	
-	fun setTitle(title: String) {
-		titleTextView.text = title
-	}
-	
-	fun setProfileImage(drawableId: Int) {
-		profileImageView.setImageDrawable(ContextCompat.getDrawable(context, drawableId))
-	}
-	
-	fun setProfileImageClick(listener: OnClickListener) {
-		profileImageView.setOnClickListener(listener)
+	companion object {
+		private const val TAG = "AppBarContent"
 	}
 	
 }

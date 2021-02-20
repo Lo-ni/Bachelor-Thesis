@@ -3,7 +3,7 @@ package de.asta.hochschule.trier.verleih.rental.adapter
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
 import de.asta.hochschule.trier.verleih.databinding.RowNoteOverviewBinding
-import de.asta.hochschule.trier.verleih.helper.DateHelper
+import de.asta.hochschule.trier.verleih.util.DateHelper
 
 class EditRentalNotesAdapter(private var notes: MutableMap<String, String>?) :
 	RecyclerView.Adapter<EditRentalNotesAdapter.ViewHolder>() {
