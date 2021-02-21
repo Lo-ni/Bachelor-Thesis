@@ -51,6 +51,7 @@ class EditRentalActivity : FragmentActivity() {
 			rental =
 				Gson().fromJson(data?.getStringExtra(INTENT_EXTRA_EDIT_RENTAL), Rental::class.java)
 			setupRecyclerViews(true)
+			setTexts()
 		}
 	}
 	
