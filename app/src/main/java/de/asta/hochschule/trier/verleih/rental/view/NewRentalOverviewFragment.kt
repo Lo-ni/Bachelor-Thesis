@@ -16,9 +16,7 @@ class NewRentalOverviewFragment(private val parentActivity: NewRentalActivity) :
 	Fragment(R.layout.fragment_new_rental_overview) {
 	
 	private lateinit var binding: FragmentNewRentalOverviewBinding
-	
 	private val viewModel: NewRentalViewModel by activityViewModels()
-	
 	private var adapter: RentalItemOverviewAdapter? = null
 	
 	override fun onCreateView(
@@ -34,6 +32,7 @@ class NewRentalOverviewFragment(private val parentActivity: NewRentalActivity) :
 		super.onViewCreated(view, savedInstanceState)
 		
 		updateTextViews(viewModel.rentalLiveData.value)
+		setupRecyclerView()
 		
 		binding.editInformationButton.setOnClickListener {
 			parentActivity.goToPage(NewRentalActivity.PAGE_DATE_TIME)
@@ -41,17 +40,9 @@ class NewRentalOverviewFragment(private val parentActivity: NewRentalActivity) :
 		binding.editItemsButton.setOnClickListener {
 			parentActivity.goToPage(NewRentalActivity.PAGE_ITEMS_QUANTITY)
 		}
-		
 		binding.noteTextInputEditText.doAfterTextChanged {
 			viewModel.enterEventNote(it.toString())
 		}
-		
-		binding.itemsRecyclerview.layoutManager = LinearLayoutManager(context)
-		adapter = RentalItemOverviewAdapter(
-			viewModel.objectsLiveData.value,
-			viewModel.rentalObjectsLiveData.value
-		)
-		binding.itemsRecyclerview.adapter = adapter
 		
 		viewModel.objectsLiveData.observe(requireActivity(), { objects ->
 			adapter = adapter?.resetData(objects, viewModel.rentalObjectsLiveData.value)
@@ -62,6 +53,15 @@ class NewRentalOverviewFragment(private val parentActivity: NewRentalActivity) :
 		viewModel.rentalLiveData.observe(requireActivity(), { rental ->
 			updateTextViews(rental)
 		})
+	}
+	
+	private fun setupRecyclerView() {
+		binding.itemsRecyclerview.layoutManager = LinearLayoutManager(context)
+		adapter = RentalItemOverviewAdapter(
+			viewModel.objectsLiveData.value,
+			viewModel.rentalObjectsLiveData.value
+		)
+		binding.itemsRecyclerview.adapter = adapter
 	}
 	
 	private fun updateTextViews(rental: Rental?) {
@@ -76,7 +76,4 @@ class NewRentalOverviewFragment(private val parentActivity: NewRentalActivity) :
 			}
 	}
 	
-	companion object {
-		private const val TAG = "NewRentalOverviewFragment"
-	}
 }

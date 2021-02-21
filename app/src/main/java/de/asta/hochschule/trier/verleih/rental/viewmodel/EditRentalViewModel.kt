@@ -30,6 +30,30 @@ class EditRentalViewModel : ViewModel() {
 		}
 	}
 	
+	fun addRentalNote(rental: Rental?, note: String, completeUpdate: (Rental) -> Unit) {
+		val firebaseRef =
+			rental?.id?.let {
+				FirebaseDatabase.getInstance().reference.child(Constants.RENTALS.childName)
+					.child(it).child(Constants.NOTES.childName)
+			}
+		
+		val timestamp = System.currentTimeMillis().toString()
+		if (rental?.notes == null) {
+			rental?.notes = mutableMapOf()
+		}
+		rental?.notes?.put(timestamp, note)
+		rental?.notes?.toMap()?.let {
+			firebaseRef?.updateChildren(it) { error, _ ->
+				if (error != null) {
+					Log.e(TAG, error.message)
+				} else {
+					completeUpdate.invoke(rental)
+				}
+			}
+		}
+		
+	}
+	
 	companion object {
 		private const val TAG = "EditRentalViewModel"
 	}

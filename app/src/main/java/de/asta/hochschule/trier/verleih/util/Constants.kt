@@ -5,6 +5,7 @@ enum class Constants(val childName: String) {
 	OBJECTS("objects"),
 	NAME("name"),
 	PICTURE_NAME("picture_name"),
+	NOTES("notes"),
 	PATH_OBJ_PIC_BIG("objects/big/"),
 	PATH_OBJ_PIC_ROUND("objects/round/"),
 	JPG_EXT(".jpg"),

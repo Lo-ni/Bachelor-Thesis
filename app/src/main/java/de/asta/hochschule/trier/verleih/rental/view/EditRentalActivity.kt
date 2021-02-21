@@ -1,13 +1,16 @@
 package de.asta.hochschule.trier.verleih.rental.view
 
-import android.content.Intent
+import android.content.*
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.*
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.*
+import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.ActivityEditRentalBinding
@@ -34,6 +37,36 @@ class EditRentalActivity : FragmentActivity() {
 		setupRecyclerViews(isEditable)
 		setViewsVisibility()
 		setTexts()
+		
+		if (isEditable == true) {
+			binding.rentalContainer.noteTextInputEditText.setOnEditorActionListener(
+				getOnNoteEditorActionListener()
+			)
+		}
+		
+	}
+	
+	private fun getOnNoteEditorActionListener(): TextView.OnEditorActionListener {
+		return TextView.OnEditorActionListener { v, actionId, _ ->
+			if (actionId == EditorInfo.IME_ACTION_DONE) {
+				viewModel.addRentalNote(rental, (v as? TextInputEditText)?.text.toString()) {
+					rental = it
+					binding.rentalContainer.notesRecyclerView.adapter =
+						EditRentalNotesAdapter(rental?.notes)
+					binding.rentalContainer.root.fullScroll(ScrollView.FOCUS_DOWN)
+				}
+				clearInputFocus(v)
+				return@OnEditorActionListener true
+			}
+			return@OnEditorActionListener false
+		}
+	}
+	
+	private fun clearInputFocus(v: View) {
+		(v as? TextInputEditText)?.text = null
+		val imm = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
+		imm?.hideSoftInputFromWindow(v.windowToken, 0)
+		v.clearFocus()
 	}
 	
 	private fun setupRecyclerViews(showMenuItems: Boolean?) {
