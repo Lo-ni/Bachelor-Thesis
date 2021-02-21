@@ -4,9 +4,9 @@ import android.view.*
 import androidx.recyclerview.widget.*
 import com.google.firebase.storage.FirebaseStorage
 import de.asta.hochschule.trier.verleih.R
+import de.asta.hochschule.trier.verleih.app.util.*
 import de.asta.hochschule.trier.verleih.databinding.RowItemQuantityOverviewBinding
 import de.asta.hochschule.trier.verleih.rental.model.RentalObject
-import de.asta.hochschule.trier.verleih.util.*
 
 class RentalItemQuantityAdapter(
 	private var objects: ArrayList<RentalObject>?,

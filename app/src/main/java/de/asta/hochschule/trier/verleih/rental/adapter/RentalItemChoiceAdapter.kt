@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.database.*
 import com.google.firebase.storage.FirebaseStorage
 import de.asta.hochschule.trier.verleih.R
+import de.asta.hochschule.trier.verleih.app.util.*
 import de.asta.hochschule.trier.verleih.databinding.RowItemChoiceBinding
 import de.asta.hochschule.trier.verleih.rental.model.RentalObject
-import de.asta.hochschule.trier.verleih.util.*
 
 class RentalItemChoiceAdapter(
 	options: FirebaseRecyclerOptions<RentalObject>,

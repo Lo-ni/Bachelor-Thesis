@@ -1,4 +1,4 @@
-package de.asta.hochschule.trier.verleih.util
+package de.asta.hochschule.trier.verleih.app.util
 
 enum class Constants(val childName: String) {
 	RENTALS("rentals"),

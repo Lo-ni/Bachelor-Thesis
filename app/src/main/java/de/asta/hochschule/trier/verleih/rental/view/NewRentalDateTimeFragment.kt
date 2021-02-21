@@ -8,9 +8,9 @@ import com.google.android.material.datepicker.*
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.*
 import de.asta.hochschule.trier.verleih.R
+import de.asta.hochschule.trier.verleih.app.util.*
 import de.asta.hochschule.trier.verleih.databinding.FragmentNewRentalDateTimeBinding
 import de.asta.hochschule.trier.verleih.rental.viewmodel.NewRentalViewModel
-import de.asta.hochschule.trier.verleih.util.*
 import org.joda.time.*
 import java.util.*
 import kotlin.collections.ArrayList

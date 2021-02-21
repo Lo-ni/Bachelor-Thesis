@@ -2,9 +2,9 @@ package de.asta.hochschule.trier.verleih.rental.viewmodel
 
 import androidx.lifecycle.*
 import com.google.firebase.database.FirebaseDatabase
+import de.asta.hochschule.trier.verleih.app.util.*
 import de.asta.hochschule.trier.verleih.rental.model.*
 import de.asta.hochschule.trier.verleih.rental.view.NewRentalActivity
-import de.asta.hochschule.trier.verleih.util.*
 import org.joda.time.DateTime
 
 class NewRentalViewModel : ViewModel() {

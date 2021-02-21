@@ -2,8 +2,8 @@ package de.asta.hochschule.trier.verleih.app.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.google.firebase.database.FirebaseDatabase
+import de.asta.hochschule.trier.verleih.app.util.Constants
 import de.asta.hochschule.trier.verleih.rental.model.Rental
-import de.asta.hochschule.trier.verleih.util.Constants
 
 class MainViewModel : ViewModel() {
 	

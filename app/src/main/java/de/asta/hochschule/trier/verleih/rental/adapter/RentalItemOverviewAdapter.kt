@@ -6,9 +6,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.storage.FirebaseStorage
 import de.asta.hochschule.trier.verleih.R
+import de.asta.hochschule.trier.verleih.app.util.GlideApp
 import de.asta.hochschule.trier.verleih.databinding.RowItemOverviewBinding
 import de.asta.hochschule.trier.verleih.rental.model.RentalObject
-import de.asta.hochschule.trier.verleih.util.GlideApp
 
 class RentalItemOverviewAdapter(
 	private var objects: ArrayList<RentalObject>?,

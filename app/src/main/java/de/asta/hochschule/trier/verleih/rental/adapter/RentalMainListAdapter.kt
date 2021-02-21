@@ -7,10 +7,10 @@ import android.view.*
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.database.*
 import com.google.gson.Gson
+import de.asta.hochschule.trier.verleih.app.util.DateHelper
 import de.asta.hochschule.trier.verleih.databinding.RowRentalListBinding
 import de.asta.hochschule.trier.verleih.rental.model.Rental
 import de.asta.hochschule.trier.verleih.rental.view.EditRentalActivity
-import de.asta.hochschule.trier.verleih.util.DateHelper
 import org.joda.time.DateTime
 import java.util.*
 

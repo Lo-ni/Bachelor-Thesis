@@ -9,11 +9,11 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.database.FirebaseDatabase
 import de.asta.hochschule.trier.verleih.R
+import de.asta.hochschule.trier.verleih.app.util.Constants
 import de.asta.hochschule.trier.verleih.databinding.*
 import de.asta.hochschule.trier.verleih.rental.adapter.RentalItemChoiceAdapter
 import de.asta.hochschule.trier.verleih.rental.model.RentalObject
 import de.asta.hochschule.trier.verleih.rental.viewmodel.NewRentalViewModel
-import de.asta.hochschule.trier.verleih.util.Constants
 
 class NewRentalItemsChoiceFragment : Fragment(R.layout.fragment_new_rental_items_choice) {
 	

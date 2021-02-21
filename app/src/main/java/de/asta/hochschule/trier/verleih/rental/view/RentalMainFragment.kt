@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.*
 import com.firebase.ui.database.*
 import com.google.firebase.database.*
 import de.asta.hochschule.trier.verleih.R
+import de.asta.hochschule.trier.verleih.app.util.*
 import de.asta.hochschule.trier.verleih.databinding.FragmentRentalMainBinding
 import de.asta.hochschule.trier.verleih.rental.adapter.RentalMainListAdapter
 import de.asta.hochschule.trier.verleih.rental.model.Rental
-import de.asta.hochschule.trier.verleih.util.*
 import org.joda.time.DateTime
 
 class RentalMainFragment : Fragment(R.layout.fragment_rental_main) {

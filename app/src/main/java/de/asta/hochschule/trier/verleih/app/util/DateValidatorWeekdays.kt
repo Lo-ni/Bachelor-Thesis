@@ -1,4 +1,4 @@
-package de.asta.hochschule.trier.verleih.util
+package de.asta.hochschule.trier.verleih.app.util
 
 import android.os.Parcel
 import android.os.Parcelable.Creator

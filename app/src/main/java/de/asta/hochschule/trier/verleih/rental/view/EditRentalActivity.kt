@@ -13,11 +13,11 @@ import com.google.android.material.snackbar.*
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
 import de.asta.hochschule.trier.verleih.R
+import de.asta.hochschule.trier.verleih.app.util.DateHelper
 import de.asta.hochschule.trier.verleih.databinding.ActivityEditRentalBinding
 import de.asta.hochschule.trier.verleih.rental.adapter.*
 import de.asta.hochschule.trier.verleih.rental.model.*
 import de.asta.hochschule.trier.verleih.rental.viewmodel.EditRentalViewModel
-import de.asta.hochschule.trier.verleih.util.DateHelper
 
 class EditRentalActivity : FragmentActivity() {
 	

@@ -6,11 +6,11 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import de.asta.hochschule.trier.verleih.R
+import de.asta.hochschule.trier.verleih.app.util.DateHelper
 import de.asta.hochschule.trier.verleih.databinding.FragmentNewRentalOverviewBinding
 import de.asta.hochschule.trier.verleih.rental.adapter.RentalItemOverviewAdapter
 import de.asta.hochschule.trier.verleih.rental.model.Rental
 import de.asta.hochschule.trier.verleih.rental.viewmodel.NewRentalViewModel
-import de.asta.hochschule.trier.verleih.util.DateHelper
 
 class NewRentalOverviewFragment(private val parentActivity: NewRentalActivity) :
 	Fragment(R.layout.fragment_new_rental_overview) {
