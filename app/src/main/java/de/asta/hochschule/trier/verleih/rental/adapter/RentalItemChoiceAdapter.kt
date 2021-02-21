@@ -55,7 +55,7 @@ class RentalItemChoiceAdapter(
 	
 	private fun loadObjectPicture(holder: ViewHolder, pictureName: String?) {
 		val path =
-			"${Constants.PATH_OBJ_PICTURE.childName}$pictureName${Constants.JPG_EXT.childName}"
+			"${Constants.PATH_OBJ_PIC_BIG.childName}$pictureName${Constants.JPG_EXT.childName}"
 		val storageRef = FirebaseStorage.getInstance().reference.child(path)
 		GlideApp.with(holder.itemView.context).load(storageRef)
 			.placeholder(R.drawable.placeholder)

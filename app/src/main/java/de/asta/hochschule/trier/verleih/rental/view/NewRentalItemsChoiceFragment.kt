@@ -5,13 +5,13 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.*
 import androidx.recyclerview.widget.GridLayoutManager
-import com.firebase.ui.database.*
+import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.database.FirebaseDatabase
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.*
 import de.asta.hochschule.trier.verleih.rental.adapter.RentalItemChoiceAdapter
-import de.asta.hochschule.trier.verleih.rental.model.*
+import de.asta.hochschule.trier.verleih.rental.model.RentalObject
 import de.asta.hochschule.trier.verleih.rental.viewmodel.NewRentalViewModel
 import de.asta.hochschule.trier.verleih.util.Constants
 
@@ -51,19 +51,11 @@ class NewRentalItemsChoiceFragment : Fragment(R.layout.fragment_new_rental_items
 	}
 	
 	private fun setupRecyclerView(bottomSheetDialog: BottomSheetDialog?) {
-		val parser = SnapshotParser { snapshot ->
-			val obj = snapshot.getValue(RentalObject::class.java)
-			if (obj != null) {
-				obj.id = snapshot.key
-				return@SnapshotParser obj
-			}
-			return@SnapshotParser RentalObject()
-		}
 		val query = FirebaseDatabase.getInstance().reference.child(Constants.OBJECTS.childName)
 			.orderByChild(Constants.NAME.childName)
 		val options =
 			FirebaseRecyclerOptions.Builder<RentalObject>()
-				.setQuery(query, parser)
+				.setQuery(query, RentalObject::class.java)
 				.build()
 		
 		adapter =
@@ -79,7 +71,7 @@ class NewRentalItemsChoiceFragment : Fragment(R.layout.fragment_new_rental_items
 				bottomSheetBinding.itemDescriptionText.text = model.description
 				bottomSheetDialog?.show()
 			})
-		binding.itemsRecyclerview.layoutManager = GridLayoutManager(this.context, 3)
+		binding.itemsRecyclerview.layoutManager = GridLayoutManager(this.context, RV_SPAN_COUNT)
 		binding.itemsRecyclerview.adapter = adapter
 	}
 	
@@ -91,6 +83,10 @@ class NewRentalItemsChoiceFragment : Fragment(R.layout.fragment_new_rental_items
 	override fun onStop() {
 		super.onStop()
 		adapter.stopListening()
+	}
+	
+	companion object {
+		private const val RV_SPAN_COUNT = 3
 	}
 	
 }

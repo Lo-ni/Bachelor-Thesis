@@ -89,14 +89,14 @@ class NewRentalViewModel : ViewModel() {
 		}
 	}
 	
-	fun removeRentalObject(rentalObject: RentalObject) {
+	fun removeRentalObject(rentalObject: RentalObject?) {
 		val list = getObjectList()
-		list?.remove(list.find { it.name == rentalObject.name })
+		list?.remove(list.find { it.name == rentalObject?.name })
 		list?.sortBy { it.name }
 		mutableObjects.value = list
 		
 		val rentalObjects = getRentalObjects()
-		rentalObjects?.remove(rentalObject.picture_name)
+		rentalObjects?.remove(rentalObject?.picture_name)
 		mutableRentalObjects.value = rentalObjects
 	}
 	

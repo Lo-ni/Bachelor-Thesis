@@ -6,13 +6,13 @@ import com.google.firebase.storage.FirebaseStorage
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.RowItemQuantityOverviewBinding
 import de.asta.hochschule.trier.verleih.rental.model.RentalObject
-import de.asta.hochschule.trier.verleih.util.GlideApp
+import de.asta.hochschule.trier.verleih.util.*
 
 class RentalItemQuantityAdapter(
 	private var objects: ArrayList<RentalObject>?,
 	private var components: MutableMap<String, MutableMap<String, Int>?>?,
-	private val removeItem: (RentalObject?, MutableMap<String, Int>?, Int) -> Unit,
-	private val updateQuantity: (RentalObject, Pair<String, Int>, Int, Int) -> Unit
+	private val removeItem: (RentalObject?, Int) -> Unit,
+	private val updateQuantity: (RentalObject, Pair<String, Int>, Int) -> Unit
 ) :
 	RecyclerView.Adapter<RentalItemQuantityAdapter.ViewHolder>() {
 	
@@ -50,19 +50,19 @@ class RentalItemQuantityAdapter(
 	}
 	
 	fun resetData(
-		objs: ArrayList<RentalObject>?,
-		comps: MutableMap<String, MutableMap<String, Int>?>?
+		objects: ArrayList<RentalObject>?,
+		components: MutableMap<String, MutableMap<String, Int>?>?
 	): RentalItemQuantityAdapter {
-		objects = objs
-		components = comps
+		this.objects = objects
+		this.components = components
 		notifyDataSetChanged()
 		return this
 	}
 	
 	class ViewHolder(
 		private val itemBinding: RowItemQuantityOverviewBinding,
-		private val removeItem: (RentalObject?, MutableMap<String, Int>?, Int) -> Unit,
-		private val updateQuantity: (RentalObject, Pair<String, Int>, Int, Int) -> Unit
+		private val removeItem: (RentalObject?, Int) -> Unit,
+		private val updateQuantity: (RentalObject, Pair<String, Int>, Int) -> Unit
 	) :
 		RecyclerView.ViewHolder(itemBinding.root) {
 		
@@ -71,16 +71,24 @@ class RentalItemQuantityAdapter(
 		fun bind(obj: RentalObject?, objComponents: MutableMap<String, Int>?) {
 			itemBinding.itemTitle.text = obj?.name
 			
-			val storageRef =
-				FirebaseStorage.getInstance().reference.child("objects/round/${obj?.picture_name}.png")
+			loadObjectPicture(obj?.picture_name)
+			setupRecyclerView(obj, objComponents)
+			
+			itemBinding.itemDeleteButton.setOnClickListener {
+				removeItem.invoke(obj, adapterPosition)
+			}
+		}
+		
+		private fun loadObjectPicture(pictureName: String?) {
+			val path =
+				"${Constants.PATH_OBJ_PIC_ROUND.childName}$pictureName${Constants.PNG_EXT.childName}"
+			val storageRef = FirebaseStorage.getInstance().reference.child(path)
 			GlideApp.with(itemView.context).load(storageRef)
 				.placeholder(R.drawable.placeholder)
 				.into(itemBinding.itemCircleImageView)
-			
-			itemBinding.itemDeleteButton.setOnClickListener {
-				removeItem.invoke(obj, objComponents, adapterPosition)
-			}
-			
+		}
+		
+		private fun setupRecyclerView(obj: RentalObject?, objComponents: MutableMap<String, Int>?) {
 			itemBinding.itemQuantityRecyclerView.layoutManager =
 				LinearLayoutManager(itemView.context)
 			adapter = RentalItemQuantitySelectionAdapter(objComponents, obj, updateQuantity)
@@ -88,7 +96,4 @@ class RentalItemQuantityAdapter(
 		}
 	}
 	
-	companion object {
-		private const val TAG = "RentalItemQuantityAdapter"
-	}
 }
