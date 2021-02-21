@@ -1,11 +1,9 @@
 package de.asta.hochschule.trier.verleih.rental.viewmodel
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
 import com.google.firebase.database.FirebaseDatabase
 import com.google.gson.Gson
-import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.rental.model.*
 import de.asta.hochschule.trier.verleih.rental.view.NewRentalActivity
 import de.asta.hochschule.trier.verleih.util.*
@@ -21,7 +19,6 @@ class NewRentalViewModel : ViewModel() {
 		MutableLiveData<MutableMap<String, MutableMap<String, Int>?>>()
 	val rentalObjectsLiveData: LiveData<MutableMap<String, MutableMap<String, Int>?>> get() = mutableRentalObjects
 	private val mutableNote = MutableLiveData<String>()
-	
 	private val mutableValidPages = MutableLiveData<ArrayList<Boolean>>()
 	val validPagesLiveData: LiveData<ArrayList<Boolean>> get() = mutableValidPages
 	
@@ -69,7 +66,7 @@ class NewRentalViewModel : ViewModel() {
 		mutableRentalObjects.value = rentalObjects
 	}
 	
-	fun addRentalObject(rentalObject: RentalObject, context: Context?) {
+	fun addRentalObject(rentalObject: RentalObject, quantityString: String) {
 		val list = getObjectList()
 		if (list?.contains(rentalObject) == false) {
 			list.add(rentalObject)
@@ -81,7 +78,7 @@ class NewRentalViewModel : ViewModel() {
 		if (rentalObjects?.containsKey(rentalObject.picture_name) == false) {
 			val newMutableMap = mutableMapOf<String, Int>()
 			if (rentalObject.components == null) {
-				context?.getString(R.string.quantity)?.let { newMutableMap.put(it, 0) }
+				newMutableMap[quantityString] = 0
 			} else {
 				rentalObject.components?.map { component ->
 					newMutableMap.put(component.key, 0)
@@ -94,7 +91,7 @@ class NewRentalViewModel : ViewModel() {
 	
 	fun removeRentalObject(rentalObject: RentalObject) {
 		val list = getObjectList()
-		list?.remove(rentalObject)
+		list?.remove(list.find { it.name == rentalObject.name })
 		list?.sortBy { it.name }
 		mutableObjects.value = list
 		

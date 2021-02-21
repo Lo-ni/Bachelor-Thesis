@@ -18,7 +18,6 @@ import kotlin.collections.ArrayList
 class NewRentalDateTimeFragment : Fragment(R.layout.fragment_new_rental_date_time) {
 	
 	private lateinit var binding: FragmentNewRentalDateTimeBinding
-	
 	private val viewModel: NewRentalViewModel by activityViewModels()
 	
 	override fun onCreateView(

@@ -19,9 +19,7 @@ import de.asta.hochschule.trier.verleih.util.DateHelper
 class EditRentalActivity : FragmentActivity() {
 	
 	private lateinit var binding: ActivityEditRentalBinding
-	
 	private val viewModel: EditRentalViewModel by viewModels()
-	
 	private var rental: Rental? = null
 	
 	override fun onCreate(savedInstanceState: Bundle?) {

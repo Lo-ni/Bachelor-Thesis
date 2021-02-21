@@ -16,7 +16,6 @@ import de.asta.hochschule.trier.verleih.rental.viewmodel.NewRentalViewModel
 class NewRentalActivity : FragmentActivity() {
 	
 	private lateinit var binding: ActivityNewRentalBinding
-	
 	private val viewModel: NewRentalViewModel by viewModels()
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
