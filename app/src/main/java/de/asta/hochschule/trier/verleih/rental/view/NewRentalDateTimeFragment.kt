@@ -21,11 +21,6 @@ class NewRentalDateTimeFragment : Fragment(R.layout.fragment_new_rental_date_tim
 	
 	private val viewModel: NewRentalViewModel by activityViewModels()
 	
-	private var pickupDate: DateTime? = null
-	private var pickupTime: DateTime? = null
-	private var returnDate: DateTime? = null
-	private var returnTime: DateTime? = null
-	
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
@@ -38,18 +33,6 @@ class NewRentalDateTimeFragment : Fragment(R.layout.fragment_new_rental_date_tim
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		
-		setupView()
-		
-		viewModel.validPagesLiveData.observe(viewLifecycleOwner, {
-			showEditTextError(binding.eventTitleEditText)
-			showEditTextError(binding.pickupDateEditText)
-			showEditTextError(binding.pickupTimeEditText)
-			showEditTextError(binding.returnDateEditText)
-			showEditTextError(binding.returnTimeEditText)
-		})
-	}
-	
-	private fun setupView() {
 		binding.eventTitleEditText.doAfterTextChanged {
 			binding.eventTitleEditText.error = null
 			viewModel.enterEventTitle(it.toString())
@@ -60,6 +43,14 @@ class NewRentalDateTimeFragment : Fragment(R.layout.fragment_new_rental_date_tim
 		setupDateTimeEditText(binding.returnDateEditText, null, null)
 		setupDateTimeEditText(binding.pickupTimeEditText, R.string.rental_pickup_time_select, true)
 		setupDateTimeEditText(binding.returnTimeEditText, R.string.rental_return_time_select, false)
+		
+		viewModel.validPagesLiveData.observe(viewLifecycleOwner, {
+			showEditTextError(binding.eventTitleEditText)
+			showEditTextError(binding.pickupDateEditText)
+			showEditTextError(binding.pickupTimeEditText)
+			showEditTextError(binding.returnDateEditText)
+			showEditTextError(binding.returnTimeEditText)
+		})
 	}
 	
 	private fun setupDateTimeEditText(
@@ -90,32 +81,34 @@ class NewRentalDateTimeFragment : Fragment(R.layout.fragment_new_rental_date_tim
 	}
 	
 	private fun setupDateTimeFields() {
-		pickupDate = viewModel.rentalLiveData.value?.pickupdate?.let { DateHelper.getDateTime(it) }
-		pickupTime = viewModel.rentalLiveData.value?.pickupdate?.let { DateHelper.getDateTime(it) }
-		returnDate = viewModel.rentalLiveData.value?.returndate?.let { DateHelper.getDateTime(it) }
-		returnTime = viewModel.rentalLiveData.value?.returndate?.let { DateHelper.getDateTime(it) }
+		val pickupDate =
+			viewModel.rentalLiveData.value?.pickupdate?.let { DateHelper.getDateTime(it) }
+		val pickupTime =
+			viewModel.rentalLiveData.value?.pickupdate?.let { DateHelper.getDateTime(it) }
+		val returnDate =
+			viewModel.rentalLiveData.value?.returndate?.let { DateHelper.getDateTime(it) }
+		val returnTime =
+			viewModel.rentalLiveData.value?.returndate?.let { DateHelper.getDateTime(it) }
 		
-		setText(binding.eventTitleEditText, viewModel.rentalLiveData.value?.eventname)
-		setText(binding.pickupDateEditText, pickupDate?.toString(DateHelper.DATE_FORMAT))
-		setText(binding.returnDateEditText, returnDate?.toString(DateHelper.DATE_FORMAT))
-		setText(binding.pickupTimeEditText, pickupTime?.toString(DateHelper.TIME_FORMAT))
-		setText(binding.returnTimeEditText, returnTime?.toString(DateHelper.TIME_FORMAT))
-	}
-	
-	private fun setText(view: TextInputEditText, text: String?) {
-		if (text != null) {
-			view.setText(text)
+		if (viewModel.rentalLiveData.value?.eventname != null) {
+			binding.eventTitleEditText.setText(viewModel.rentalLiveData.value?.eventname)
 		}
+		binding.pickupDateEditText.setText(pickupDate?.toString(DateHelper.DATE_FORMAT))
+		binding.returnDateEditText.setText(returnDate?.toString(DateHelper.DATE_FORMAT))
+		binding.pickupTimeEditText.setText(pickupTime?.toString(DateHelper.TIME_FORMAT))
+		binding.returnTimeEditText.setText(returnTime?.toString(DateHelper.TIME_FORMAT))
 	}
 	
 	private fun setupDatePicker(): MaterialDatePicker<androidx.core.util.Pair<Long, Long>> {
 		val todayMS = MaterialDatePicker.todayInUtcMilliseconds()
 		val nextSixMonthCal = Calendar.getInstance(TIMEZONE_UTC)
 		nextSixMonthCal.roll(Calendar.MONTH, 6)
+		val tomorrowCal = Calendar.getInstance(TIMEZONE_UTC)
+		tomorrowCal.roll(Calendar.DAY_OF_MONTH, 1)
 		
 		val validators = ArrayList<CalendarConstraints.DateValidator>()
 		validators.add(DateValidatorWeekdays())
-		validators.add(DateValidatorPointForward.now())
+		validators.add(DateValidatorPointForward.from(tomorrowCal.timeInMillis))
 		
 		val picker = MaterialDatePicker.Builder.dateRangePicker()
 			.setTitleText(R.string.rental_date_range_select)
@@ -128,13 +121,14 @@ class NewRentalDateTimeFragment : Fragment(R.layout.fragment_new_rental_date_tim
 			).build()
 		picker.addOnPositiveButtonClickListener {
 			val first = DateTime(it.first, DateTimeZone.UTC)
+			updateDate(first, binding.pickupDateEditText, binding.pickupTimeEditText, true)
 			val second = DateTime(it.second, DateTimeZone.UTC)
-			updateDates(first, second)
+			updateDate(second, binding.returnDateEditText, binding.returnTimeEditText, false)
 		}
 		return picker
 	}
 	
-	private fun setupTimePicker(titleResId: Int, isPickupTime: Boolean): MaterialTimePicker {
+	private fun setupTimePicker(titleResId: Int, isPickup: Boolean): MaterialTimePicker {
 		val picker = MaterialTimePicker.Builder()
 			.setTimeFormat(TimeFormat.CLOCK_24H)
 			.setHour(13)
@@ -143,42 +137,44 @@ class NewRentalDateTimeFragment : Fragment(R.layout.fragment_new_rental_date_tim
 			.build()
 		picker.addOnPositiveButtonClickListener {
 			val date = DateTime(1, 1, 1, picker.hour, picker.minute, DateTimeZone.UTC)
-			if (isPickupTime) {
-				updateTimes(date, null)
+			if (isPickup) {
+				updateTime(date, binding.pickupDateEditText, binding.pickupTimeEditText, isPickup)
 			} else {
-				updateTimes(null, date)
+				updateTime(date, binding.returnDateEditText, binding.returnTimeEditText, isPickup)
 			}
 		}
 		return picker
 	}
 	
-	private fun updateDates(first: DateTime, second: DateTime) {
-		pickupDate =
-			DateTime(first.year, first.monthOfYear, first.dayOfMonth, 0, 0, DateTimeZone.UTC)
-		binding.pickupDateEditText.setText(pickupDate?.toString(DateHelper.DATE_FORMAT))
-		selectDate(pickupDate, pickupTime, true)
-		
-		returnDate =
-			DateTime(second.year, second.monthOfYear, second.dayOfMonth, 0, 0, DateTimeZone.UTC)
-		binding.returnDateEditText.setText(returnDate?.toString(DateHelper.DATE_FORMAT))
-		selectDate(returnDate, returnTime, false)
+	private fun updateDate(
+		value: DateTime,
+		dateEditText: TextInputEditText,
+		timeEditText: TextInputEditText,
+		isPickup: Boolean
+	) {
+		val date =
+			DateTime(value.year, value.monthOfYear, value.dayOfMonth, 0, 0, DateTimeZone.UTC)
+		val time = DateHelper.getDateTime(
+			timeEditText.text.toString(),
+			DateHelper.TIME_FORMAT
+		)
+		dateEditText.setText(date.toString(DateHelper.DATE_FORMAT))
+		selectDate(date, time, isPickup)
 	}
 	
-	private fun updateTimes(first: DateTime?, second: DateTime?) {
-		if (first != null) {
-			pickupTime = DateTime(1, 1, 1, first.hourOfDay, first.minuteOfHour, DateTimeZone.UTC)
-			binding.pickupTimeEditText.setText(pickupTime?.toString(DateHelper.TIME_FORMAT))
-			selectDate(pickupDate, pickupTime, true)
-		}
-		
-		if (second != null) {
-			returnTime = DateTime(1, 1, 1, second.hourOfDay, second.minuteOfHour, DateTimeZone.UTC)
-			binding.returnTimeEditText.setText(returnTime?.toString(DateHelper.TIME_FORMAT))
-			selectDate(returnDate, returnTime, false)
-		}
+	private fun updateTime(
+		value: DateTime, dateEditText: TextInputEditText,
+		timeEditText: TextInputEditText,
+		isPickup: Boolean
+	) {
+		val time =
+			DateTime(1, 1, 1, value.hourOfDay, value.minuteOfHour, DateTimeZone.UTC)
+		val date = DateHelper.getDateTime(dateEditText.text.toString(), DateHelper.DATE_FORMAT)
+		timeEditText.setText(time.toString(DateHelper.TIME_FORMAT))
+		selectDate(date, time, isPickup)
 	}
 	
-	private fun selectDate(date: DateTime?, time: DateTime?, isPickupDateTime: Boolean) {
+	private fun selectDate(date: DateTime?, time: DateTime?, isPickup: Boolean) {
 		if (date != null && time != null) {
 			val dateTime = DateTime(
 				date.year,
@@ -188,7 +184,7 @@ class NewRentalDateTimeFragment : Fragment(R.layout.fragment_new_rental_date_tim
 				time.minuteOfHour,
 				DateTimeZone.UTC
 			)
-			if (isPickupDateTime) {
+			if (isPickup) {
 				viewModel.selectPickupDate(dateTime)
 			} else {
 				viewModel.selectReturnDate(dateTime)

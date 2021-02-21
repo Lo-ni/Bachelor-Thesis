@@ -19,6 +19,14 @@ object DateHelper {
 		return formatter.parseDateTime(dateString)
 	}
 	
+	fun getDateTime(dateString: String?, format: String): DateTime? {
+		if (!dateString.isNullOrBlank()) {
+			val formatter = DateTimeFormat.forPattern(format).withLocale(Locale.getDefault())
+			return formatter.parseDateTime(dateString)
+		}
+		return null
+	}
+	
 	fun getTimeString(dateTime: DateTime): String {
 		return if (dateTime.minuteOfHour().get() < 10) {
 			"${dateTime.hourOfDay().asString}:0${dateTime.minuteOfHour().asText}"
