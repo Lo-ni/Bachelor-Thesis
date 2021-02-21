@@ -43,10 +43,19 @@ class RentalMainListAdapter(
 		}
 		
 		holder.itemView.setOnClickListener {
-			val intent = Intent(context, EditRentalActivity::class.java)
-			intent.putExtra(EditRentalActivity.INTENT_EXTRA_RENTAL, Gson().toJson(model))
-			context.startActivityForResult(intent, EditRentalActivity.DELETE_RENTAL_REQUEST_CODE)
+			startEditRentalActivitiy(model)
 		}
+	}
+	
+	override fun onDataChanged() {
+		super.onDataChanged()
+		showEmptyState.invoke(options.snapshots.size < 1)
+	}
+	
+	private fun startEditRentalActivitiy(model: Rental) {
+		val intent = Intent(context, EditRentalActivity::class.java)
+		intent.putExtra(EditRentalActivity.INTENT_EXTRA_RENTAL, Gson().toJson(model))
+		context.startActivityForResult(intent, EditRentalActivity.DELETE_RENTAL_REQUEST_CODE)
 	}
 	
 	@SuppressLint("SetTextI18n")
@@ -57,16 +66,7 @@ class RentalMainListAdapter(
 			"${dateTime.monthOfYear().asShortText} \'${dateTime.year.toString().drop(2)}"
 	}
 	
-	override fun onDataChanged() {
-		super.onDataChanged()
-		showEmptyState.invoke(options.snapshots.size < 1)
-	}
-	
 	class ViewHolder(val itemBinding: RowRentalListBinding) :
 		RecyclerView.ViewHolder(itemBinding.root)
-	
-	companion object {
-		private const val TAG = "RentalMainListAdapter"
-	}
 	
 }

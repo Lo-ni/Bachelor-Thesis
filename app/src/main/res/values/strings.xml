@@ -43,4 +43,6 @@
     <string name="input_required">Input required</string>
     <string name="rental_items_choice_error">Please chose at least one item.</string>
     <string name="rental_items_quantity_error">Please specify the desired quantity of each item.</string>
+    <string name="sign_in_canceled_message">Please finish the sign in process.</string>
+    <string name="sign_in_error_message">Sign in failed. Please try again.</string>
 </resources>

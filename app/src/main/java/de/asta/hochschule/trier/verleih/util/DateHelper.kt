@@ -10,7 +10,6 @@ object DateHelper {
 	const val DATE_FORMAT = "dd.MM.yyyy"
 	const val TIME_FORMAT = "HH:mm"
 	const val DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm"
-	const val PRETTY_DATE_FORMAT = "dd.MMMM yyyy"
 	const val TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm"
 	const val LONG_DATE_TIME_FORMAT = "EEE, dd.MM.yyyy HH:mm"
 	

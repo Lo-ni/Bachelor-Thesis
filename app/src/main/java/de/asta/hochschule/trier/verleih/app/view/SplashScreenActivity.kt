@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseApp
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.app.viewmodel.SplashScreenViewModel
-import de.asta.hochschule.trier.verleih.signIn.activity.SignInActivity
+import de.asta.hochschule.trier.verleih.signIn.view.SignInActivity
 
 class SplashScreenActivity : AppCompatActivity() {
 	

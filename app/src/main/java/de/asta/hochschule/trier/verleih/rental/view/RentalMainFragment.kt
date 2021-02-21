@@ -4,28 +4,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
 import com.firebase.ui.database.*
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.databinding.FragmentRentalMainBinding
 import de.asta.hochschule.trier.verleih.rental.adapter.RentalMainListAdapter
 import de.asta.hochschule.trier.verleih.rental.model.Rental
-import de.asta.hochschule.trier.verleih.util.DateHelper
+import de.asta.hochschule.trier.verleih.util.*
 import org.joda.time.DateTime
 
 class RentalMainFragment : Fragment(R.layout.fragment_rental_main) {
 	
 	private lateinit var binding: FragmentRentalMainBinding
-	
-	private lateinit var recentRentalsAdapter: RentalMainListAdapter
-	private lateinit var pastRentalsAdapter: RentalMainListAdapter
-	
-	private var recentRentalsIsEmpty = false
-	private var pastRentalsIsEmpty = false
 	private var recentRentalsIsExpanded = true
 	private var pastRentalsIsExpanded = true
+	private var recentRentalsIsEmpty = false
+	private var pastRentalsIsEmpty = false
 	
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -44,6 +41,48 @@ class RentalMainFragment : Fragment(R.layout.fragment_rental_main) {
 			startActivity(intent)
 		}
 		
+		val query = FirebaseDatabase.getInstance().reference.child(Constants.RENTALS.childName)
+			.orderByChild(Constants.RETURN_DATE.childName)
+		val queryRecent = query.startAt(DateTime.now().toString(DateHelper.TIMESTAMP_FORMAT))
+		val queryPast = query.endAt(DateTime.now().toString(DateHelper.TIMESTAMP_FORMAT))
+		setupRecyclerView(
+			binding.recentRentalsRecyclerView,
+			queryRecent,
+			binding.noRecentRentalsText,
+			binding.recentRentalsHeaderIcon,
+			binding.recentRentalsHeaderLayout,
+			true
+		)
+		setupRecyclerView(
+			binding.pastRentalsRecyclerView,
+			queryPast,
+			binding.noPastRentalsText,
+			binding.pastRentalsHeaderIcon,
+			binding.pastRentalsHeaderLayout,
+			false
+		)
+	}
+	
+	override fun onStart() {
+		super.onStart()
+		(binding.recentRentalsRecyclerView.adapter as RentalMainListAdapter).startListening()
+		(binding.pastRentalsRecyclerView.adapter as RentalMainListAdapter).startListening()
+	}
+	
+	override fun onStop() {
+		super.onStop()
+		(binding.recentRentalsRecyclerView.adapter as RentalMainListAdapter).stopListening()
+		(binding.pastRentalsRecyclerView.adapter as RentalMainListAdapter).stopListening()
+	}
+	
+	private fun setupRecyclerView(
+		recyclerView: RecyclerView,
+		query: Query,
+		noRentalsTextView: TextView,
+		headerIcon: ImageView,
+		headerLayout: ConstraintLayout,
+		isRecentRental: Boolean
+	) {
 		val parser = SnapshotParser { snapshot ->
 			val rental = snapshot.getValue(Rental::class.java)
 			if (rental != null) {
@@ -52,123 +91,53 @@ class RentalMainFragment : Fragment(R.layout.fragment_rental_main) {
 			}
 			return@SnapshotParser Rental()
 		}
-		
-		val queryRecent =
-			FirebaseDatabase.getInstance().reference.child("rentals").orderByChild("returndate")
-				.startAt(DateTime.now().toString(DateHelper.TIMESTAMP_FORMAT))
-		val optionsRecent =
-			FirebaseRecyclerOptions.Builder<Rental>().setQuery(queryRecent, parser).build()
-		recentRentalsAdapter =
-			RentalMainListAdapter(requireActivity(), optionsRecent) { showEmptyState ->
+		val options = FirebaseRecyclerOptions.Builder<Rental>().setQuery(query, parser).build()
+		recyclerView.layoutManager = LinearLayoutManager(this.context)
+		recyclerView.adapter = RentalMainListAdapter(requireActivity(), options) { showEmptyState ->
+			val expanded = if (isRecentRental) {
 				recentRentalsIsEmpty = showEmptyState
-				toggleEmptyState(
-					recentRentalsIsEmpty,
-					binding.noRecentRentalsText,
-					recentRentalsIsExpanded,
-					binding.recentRentalsHeaderIcon
-				)
-			}
-		binding.recentRentalsRecyclerView.layoutManager = LinearLayoutManager(this.context)
-		binding.recentRentalsRecyclerView.adapter = recentRentalsAdapter
-		
-		val queryPast =
-			FirebaseDatabase.getInstance().reference.child("rentals").orderByChild("returndate")
-				.endAt(DateTime.now().toString(DateHelper.TIMESTAMP_FORMAT))
-		val optionsPast =
-			FirebaseRecyclerOptions.Builder<Rental>().setQuery(queryPast, parser)
-				.build()
-		pastRentalsAdapter =
-			RentalMainListAdapter(requireActivity(), optionsPast) { showEmptyState ->
+				recentRentalsIsExpanded
+			} else {
 				pastRentalsIsEmpty = showEmptyState
-				toggleEmptyState(
-					pastRentalsIsEmpty,
-					binding.noPastRentalsText,
-					pastRentalsIsExpanded,
-					binding.pastRentalsHeaderIcon
-				)
+				pastRentalsIsExpanded
 			}
-		binding.pastRentalsRecyclerView.layoutManager = LinearLayoutManager(this.context)
-		binding.pastRentalsRecyclerView.adapter = pastRentalsAdapter
-		
-		binding.recentRentalsHeaderLayout.setOnClickListener {
-			recentRentalsIsExpanded = !recentRentalsIsExpanded
-			toggleExpandCollapseState(
-				recentRentalsIsExpanded,
-				binding.recentRentalsHeaderIcon,
-				binding.recentRentalsRecyclerView,
-				recentRentalsIsEmpty,
-				binding.noRecentRentalsText
-			)
+			setVisibility(noRentalsTextView, showEmptyState)
+			setIcon(headerIcon, expanded)
 		}
-		binding.pastRentalsHeaderLayout.setOnClickListener {
-			pastRentalsIsExpanded = !pastRentalsIsExpanded
-			toggleExpandCollapseState(
-				pastRentalsIsExpanded,
-				binding.pastRentalsHeaderIcon,
-				binding.pastRentalsRecyclerView,
-				pastRentalsIsEmpty,
-				binding.noPastRentalsText
-			)
+		
+		headerLayout.setOnClickListener {
+			val expanded = if (isRecentRental) {
+				recentRentalsIsExpanded = !recentRentalsIsExpanded
+				recentRentalsIsExpanded
+			} else {
+				pastRentalsIsExpanded = !pastRentalsIsExpanded
+				pastRentalsIsExpanded
+			}
+			val isEmpty = if (isRecentRental) {
+				recentRentalsIsEmpty
+			} else {
+				pastRentalsIsEmpty
+			}
+			setIcon(headerIcon, expanded)
+			setVisibility(recyclerView, expanded)
+			setVisibility(noRentalsTextView, expanded && isEmpty)
 		}
 	}
 	
-	private fun toggleEmptyState(
-		showEmptyState: Boolean,
-		emptyStateTextView: TextView,
-		isExpanded: Boolean,
-		icon: ImageView
-	) {
-		emptyStateTextView.visibility = if (showEmptyState) {
+	private fun setVisibility(view: View, show: Boolean) {
+		view.visibility = if (show) {
 			View.VISIBLE
 		} else {
 			View.GONE
 		}
+	}
+	
+	private fun setIcon(icon: ImageView, isExpanded: Boolean) {
 		if (isExpanded) {
 			icon.setImageResource(R.drawable.ic_chevron_up)
 		} else {
 			icon.setImageResource(R.drawable.ic_chevron_down)
 		}
-	}
-	
-	private fun toggleExpandCollapseState(
-		isExpanded: Boolean,
-		icon: ImageView,
-		recyclerView: RecyclerView,
-		showEmptyState: Boolean,
-		emptyStateTextView: TextView
-	) {
-		if (isExpanded) {
-			icon.setImageResource(R.drawable.ic_chevron_up)
-		} else {
-			icon.setImageResource(R.drawable.ic_chevron_down)
-		}
-		
-		recyclerView.visibility = if (isExpanded && !showEmptyState) {
-			View.VISIBLE
-		} else {
-			View.GONE
-		}
-		emptyStateTextView.visibility = if (isExpanded && showEmptyState) {
-			View.VISIBLE
-		} else {
-			View.GONE
-		}
-	}
-	
-	override fun onStart() {
-		super.onStart()
-		recentRentalsAdapter.startListening()
-		pastRentalsAdapter.startListening()
-	}
-	
-	override fun onStop() {
-		super.onStop()
-		recentRentalsAdapter.stopListening()
-		pastRentalsAdapter.stopListening()
-	}
-	
-	companion object {
-		private const val TAG = "RentalMainFragment"
 	}
 	
 }

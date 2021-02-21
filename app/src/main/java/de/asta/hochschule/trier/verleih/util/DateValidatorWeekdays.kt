@@ -6,7 +6,8 @@ import com.google.android.material.datepicker.CalendarConstraints.DateValidator
 import java.util.*
 
 class DateValidatorWeekdays internal constructor() : DateValidator {
-	private val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+	
+	private val utc = Calendar.getInstance(TimeZone.getTimeZone(TIMEZONE))
 	
 	override fun isValid(date: Long): Boolean {
 		utc.timeInMillis = date
@@ -32,6 +33,7 @@ class DateValidatorWeekdays internal constructor() : DateValidator {
 	}
 	
 	companion object {
+		// required for DateValidator
 		val CREATOR: Creator<DateValidatorWeekdays?> = object : Creator<DateValidatorWeekdays?> {
 			override fun createFromParcel(source: Parcel): DateValidatorWeekdays {
 				return DateValidatorWeekdays()
@@ -41,5 +43,6 @@ class DateValidatorWeekdays internal constructor() : DateValidator {
 				return arrayOfNulls(size)
 			}
 		}
+		private const val TIMEZONE = "UTC"
 	}
 }

@@ -1,4 +1,4 @@
-package de.asta.hochschule.trier.verleih.signIn.activity
+package de.asta.hochschule.trier.verleih.signIn.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
+import de.asta.hochschule.trier.verleih.R
 import de.asta.hochschule.trier.verleih.app.view.MainActivity
 import de.asta.hochschule.trier.verleih.signIn.viewmodel.SignInViewModel
 
@@ -22,33 +23,23 @@ class SignInActivity : AppCompatActivity() {
 	
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
-		Log.d(TAG, "$requestCode $resultCode $data")
 		
 		if (requestCode == RC_SIGN_IN) {
 			val response = IdpResponse.fromResultIntent(data)
 			if (resultCode == RESULT_OK) {
-				val user = FirebaseAuth.getInstance().currentUser
-				Log.d(TAG, "Logged in user ${user?.displayName}")
+				Log.d(TAG, "Logged in user ${FirebaseAuth.getInstance().currentUser?.displayName}")
 				startActivity(Intent(this, MainActivity::class.java))
 				finish()
 			} else {
-				// sign in failed
-				if (response == null) {
-					// user cancelled the sign-in flow using the back button
+				val messageResId = if (response == null) {
 					Log.d(TAG, "Sign In has been canceled")
-					Toast.makeText(this, "Bitte beende den Login-Vorgang", Toast.LENGTH_SHORT)
-						.show()
-					startActivityForResult(viewModel.getSignInIntent(), RC_SIGN_IN)
+					R.string.sign_in_canceled_message
 				} else {
-					// handle the error
 					Log.e(TAG, "Sign In failed", response.error)
-					Toast.makeText(
-						this,
-						"Login fehlgeschlagen. Bitte versuche es erneut.",
-						Toast.LENGTH_SHORT
-					).show()
-					startActivityForResult(viewModel.getSignInIntent(), RC_SIGN_IN)
+					R.string.sign_in_error_message
 				}
+				Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
+				startActivityForResult(viewModel.getSignInIntent(), RC_SIGN_IN)
 			}
 		}
 	}

@@ -43,4 +43,6 @@
     <string name="input_required">Eingabe benötigt</string>
     <string name="rental_items_choice_error">Bitte wähle mindestens einen Gegenstand aus.</string>
     <string name="rental_items_quantity_error">Bitte gib für jeden Gegenstand die gewünschte Anzahl an.</string>
+    <string name="sign_in_canceled_message">Bitte beende den Login-Vorgang.</string>
+    <string name="sign_in_error_message">Login fehlgeschlagen. Bitte versuche es erneut.</string>
 </resources>

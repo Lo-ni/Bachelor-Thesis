@@ -1,9 +1,7 @@
 package de.asta.hochschule.trier.verleih.rental.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.google.firebase.database.FirebaseDatabase
-import com.google.gson.Gson
 import de.asta.hochschule.trier.verleih.rental.model.*
 import de.asta.hochschule.trier.verleih.rental.view.NewRentalActivity
 import de.asta.hochschule.trier.verleih.util.*
@@ -23,13 +21,13 @@ class NewRentalViewModel : ViewModel() {
 	val validPagesLiveData: LiveData<ArrayList<Boolean>> get() = mutableValidPages
 	
 	fun saveRentalToDatabase() {
-		val rental = buildRental()
+		val rental = compileRental()
 		val firebaseRef =
 			FirebaseDatabase.getInstance().reference.child(Constants.RENTALS.childName)
 		firebaseRef.push().setValue(rental)
 	}
 	
-	private fun buildRental(): Rental? {
+	private fun compileRental(): Rental? {
 		val rental = getRental()
 		val rentalObjects = getRentalObjects()
 		val note = mutableNote.value
@@ -43,10 +41,9 @@ class NewRentalViewModel : ViewModel() {
 			rental?.notes?.put(timestamp, note)
 		}
 		rental?.timestamp = timestamp
-		rental?.status = "In Bearbeitung"
+		rental?.status = RentalState.IN_PROGRESS.state
 		
 		mutableRental.value = rental
-		Log.d(TAG, Gson().toJson(mutableRental.value))
 		return rental
 	}
 	
@@ -201,7 +198,4 @@ class NewRentalViewModel : ViewModel() {
 		return validItems
 	}
 	
-	companion object {
-		private const val TAG = "NewRentalViewModel"
-	}
 }

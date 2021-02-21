@@ -7,6 +7,7 @@ import de.asta.hochschule.trier.verleih.rental.view.*
 
 class NewRentalPagerAdapter(private val activity: NewRentalActivity) :
 	FragmentStateAdapter(activity) {
+	
 	override fun getItemCount(): Int {
 		return NewRentalActivity.NUM_PAGES
 	}
