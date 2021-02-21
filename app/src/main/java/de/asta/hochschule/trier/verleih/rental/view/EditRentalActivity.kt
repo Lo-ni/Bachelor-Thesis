@@ -43,7 +43,15 @@ class EditRentalActivity : FragmentActivity() {
 				getOnNoteEditorActionListener()
 			)
 		}
-		
+	}
+	
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		super.onActivityResult(requestCode, resultCode, data)
+		if (requestCode == EDIT_RENTAL_REQUEST_CODE) {
+			rental =
+				Gson().fromJson(data?.getStringExtra(INTENT_EXTRA_EDIT_RENTAL), Rental::class.java)
+			setupRecyclerViews(true)
+		}
 	}
 	
 	private fun getOnNoteEditorActionListener(): TextView.OnEditorActionListener {
@@ -151,8 +159,10 @@ class EditRentalActivity : FragmentActivity() {
 		const val INTENT_EXTRA_RENTAL = "Rental"
 		const val INTENT_EXTRA_RENTAL_OBJECTS = "Rental_Objects"
 		const val INTENT_EXTRA_DELETE_RENTAL = "Delete_Rental"
-		private const val EDIT_RENTAL_REQUEST_CODE = 1
+		const val INTENT_EXTRA_EDIT_RENTAL = "Edit_Rental"
+		const val EDIT_RENTAL_REQUEST_CODE = 1
 		const val DELETE_RENTAL_REQUEST_CODE = 2
+		private const val TAG = "EditRentalActivity"
 	}
 	
 }

@@ -1,5 +1,6 @@
 package de.asta.hochschule.trier.verleih.rental.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.google.firebase.database.FirebaseDatabase
 import de.asta.hochschule.trier.verleih.app.util.*
@@ -19,12 +20,32 @@ class NewRentalViewModel : ViewModel() {
 	private val mutableNote = MutableLiveData<String>()
 	private val mutableValidPages = MutableLiveData<ArrayList<Boolean>>()
 	val validPagesLiveData: LiveData<ArrayList<Boolean>> get() = mutableValidPages
+	private var editRental = false
 	
-	fun saveRentalToDatabase() {
+	fun saveRentalToDatabase(completeUpdate: (Rental?) -> Unit) {
 		val rental = compileRental()
+		
 		val firebaseRef =
 			FirebaseDatabase.getInstance().reference.child(Constants.RENTALS.childName)
-		firebaseRef.push().setValue(rental)
+		if (editRental) {
+			val childId = rental?.id
+			if (childId != null) {
+				val rentalUpdate = mutableMapOf<String, Rental>()
+				rental.id = null
+				rentalUpdate[childId] = rental
+				firebaseRef.updateChildren(rentalUpdate.toMap()) { error, _ ->
+					if (error != null) {
+						Log.e(TAG, error.message)
+					} else {
+						rental.id = childId
+						completeUpdate.invoke(rental)
+					}
+				}
+			}
+		} else {
+			firebaseRef.push().setValue(rental)
+			completeUpdate.invoke(rental)
+		}
 	}
 	
 	private fun compileRental(): Rental? {
@@ -159,6 +180,7 @@ class NewRentalViewModel : ViewModel() {
 		mutableRental.value = rental
 		mutableRentalObjects.value = rental.objects
 		mutableObjects.value = rentalObjects
+		editRental = true
 	}
 	
 	fun validateInput(currentPage: Int): Boolean {
@@ -196,6 +218,10 @@ class NewRentalViewModel : ViewModel() {
 			}
 		}
 		return validItems
+	}
+	
+	companion object {
+		private const val TAG = "NewRentalViewModel"
 	}
 	
 }

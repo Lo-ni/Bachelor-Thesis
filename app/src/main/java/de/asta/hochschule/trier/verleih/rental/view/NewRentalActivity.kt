@@ -65,8 +65,12 @@ class NewRentalActivity : FragmentActivity() {
 		binding.pagerNextButton.setOnClickListener {
 			if (viewModel.validateInput(binding.newRentalPager.currentItem)) {
 				if (binding.newRentalPager.currentItem == PAGE_OVERVIEW) {
-					viewModel.saveRentalToDatabase()
-					finish()
+					viewModel.saveRentalToDatabase {
+						val i = intent
+						i.putExtra(EditRentalActivity.INTENT_EXTRA_EDIT_RENTAL, Gson().toJson(it))
+						setResult(EditRentalActivity.EDIT_RENTAL_REQUEST_CODE, i)
+						finish()
+					}
 				} else {
 					binding.newRentalPager.currentItem = binding.newRentalPager.currentItem + 1
 				}
